@@ -3,6 +3,7 @@
 namespace Drupal\lightgallery\Manager;
 
 
+use Drupal\image\Entity\ImageStyle;
 use Drupal\lightgallery\Field\FieldAnimateThumb;
 use Drupal\lightgallery\Field\FieldAutoplay;
 use Drupal\lightgallery\Field\FieldAutoplayControls;
@@ -19,6 +20,7 @@ use Drupal\lightgallery\Field\FieldGalleryId;
 use Drupal\lightgallery\Field\FieldHash;
 use Drupal\lightgallery\Field\FieldImage;
 use Drupal\lightgallery\Field\FieldKeyPress;
+use Drupal\lightgallery\Field\FieldLightgalleryImageStyle;
 use Drupal\lightgallery\Field\FieldLoop;
 use Drupal\lightgallery\Field\FieldMode;
 use Drupal\lightgallery\Field\FieldMouseWheel;
@@ -28,6 +30,7 @@ use Drupal\lightgallery\Field\FieldPreload;
 use Drupal\lightgallery\Field\FieldProgress;
 use Drupal\lightgallery\Field\FieldScale;
 use Drupal\lightgallery\Field\FieldThumbHeight;
+use Drupal\lightgallery\Field\FieldThumbImageStyle;
 use Drupal\lightgallery\Field\FieldThumbnail;
 use Drupal\lightgallery\Field\FieldThumbWidth;
 use Drupal\lightgallery\Field\FieldTitle;
@@ -88,6 +91,8 @@ class LightgalleryManager {
       new FieldThumbnail(),
       new FieldImage(),
       new FieldTitle(),
+      new FieldThumbImageStyle(),
+      new FieldLightgalleryImageStyle(),
       new FieldMode(),
       new FieldPreload(),
       new FieldClosable(),
@@ -122,6 +127,21 @@ class LightgalleryManager {
       new FieldHash(),
       new FieldGalleryId(),
     );
+  }
+
+  /**
+   * Returns formatted array of all image styles.
+   */
+  public static function getImageStyles() {
+    $options = array('' => t('Original image'));
+    $image_styles = ImageStyle::loadMultiple();
+
+    /** @var ImageStyle $image_style */
+    foreach ($image_styles as $image_style) {
+      $options[$image_style->id()] = $image_style->label();
+    }
+
+    return $options;
   }
 
   /**
@@ -192,6 +212,20 @@ class LightgalleryManager {
       'middle' => t('Middle'),
       'right' => t('Right')
     );
+  }
+
+  /**
+   * Flatten array and preserve keys.
+   * @param array $array
+   * @return array
+   */
+  public static function flattenArray(array $array) {
+    $flattened_array = array();
+    array_walk_recursive($array,
+      function ($a, $key) use (&$flattened_array) {
+        $flattened_array[$key] = $a;
+      });
+    return $flattened_array;
   }
 
 }

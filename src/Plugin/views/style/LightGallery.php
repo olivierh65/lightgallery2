@@ -150,13 +150,6 @@ class LightGallery extends StylePluginBase {
       }
     }
 
-    $form['lightgallery_hash']['gallery_id'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Gallery ID'),
-      '#default_value' => isset($this->options['lightgallery']['gallery_id']) ? $this->options['lightgallery']['gallery_id'] : 1,
-      '#description' => t('Unique id for each gallery. It is mandatory when you use hash plugin for multiple galleries on the same page.'),
-    );
-
   }
 
   /**
@@ -172,7 +165,7 @@ class LightGallery extends StylePluginBase {
     $form_state->setValue(array(
       'style_options',
       'lightgallery'
-    ), $this->flattenArray($style_options));
+    ), LightgalleryManager::flattenArray($style_options));
 
     // Unset nested values.
     $form_state->unsetValue(array('style_options', 'lightgallery_core'));
@@ -295,20 +288,6 @@ class LightGallery extends StylePluginBase {
    */
   private function getNonImageFields() {
     return !empty($this->fieldSources['field_options']) ? $this->fieldSources['field_options'] : array();
-  }
-
-  /**
-   * Flatten array and preserve keys.
-   * @param array $array
-   * @return array
-   */
-  private function flattenArray(array $array) {
-    $flattened_array = array();
-    array_walk_recursive($array,
-      function ($a, $key) use (&$flattened_array) {
-        $flattened_array[$key] = $a;
-      });
-    return $flattened_array;
   }
 
 }

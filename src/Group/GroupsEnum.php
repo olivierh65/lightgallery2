@@ -11,4 +11,19 @@ abstract class GroupsEnum {
   const LIGHTGALLERY_PAGER = 'lightgallery_pager';
   const LIGHTGALLERY_ZOOM = 'lightgallery_zoom';
   const LIGHTGALLERY_HASH = 'lightgallery_hash';
+
+  /**
+   * Returns array of all groups.
+   */
+  public static function toArray() {
+    return array(
+      self::LIGHTGALLERY_CORE,
+      self::LIGHTGALLERY_THUMBS,
+      self::LIGHTGALLERY_AUTOPLAY,
+      self::LIGHTGALLERY_FULL_SCREEN,
+      self::LIGHTGALLERY_PAGER,
+      self::LIGHTGALLERY_ZOOM,
+      self::LIGHTGALLERY_HASH,
+    );
+  }
 }
