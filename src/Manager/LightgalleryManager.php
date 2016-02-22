@@ -61,9 +61,11 @@ class LightgalleryManager {
   public function loadLibraries($id) {
     $attached = [];
     // Add library.
-    if ((!$library = libraries_load('lightgallery')) || empty($library['loaded'])) {
-      drupal_set_message(t('Lightgallery library was not found.'), 'error');
-      return FALSE;
+    if (!$library = libraries_detect('lightgallery')) {
+      if(!$library['installed']) {
+        drupal_set_message(t('Lightgallery library was not found.'), 'error');
+        return FALSE;
+      }
     }
 
     // JavaScript settings
