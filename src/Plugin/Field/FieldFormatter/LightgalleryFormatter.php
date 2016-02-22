@@ -2,12 +2,9 @@
 
 namespace Drupal\lightgallery\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\file\FileStorageInterface;
+use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\lightgallery\Field\FieldInterface;
@@ -28,25 +25,7 @@ use Drupal\lightgallery\Optionset\LightgalleryOptionset;
  *   }
  * )
  */
-class LightgalleryFormatter extends FormatterBase {
-
-  protected $entityTypeManager;
-
-  /**
-   * LightgalleryFormatter constructor.
-   * @param string $plugin_id
-   * @param mixed $plugin_definition
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-   * @param array $settings
-   * @param string $label
-   * @param string $view_mode
-   * @param array $third_party_settings
-   */
-  public function __construct($plugin_id, $plugin_definition, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->entityTypeManager = \Drupal::service('entity_type.manager');
-  }
-
+class LightgalleryFormatter extends FileFormatterBase {
 
   /**
    * {@inheritdoc}
@@ -151,11 +130,15 @@ class LightgalleryFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     /**
-     * @var FileStorageInterface $file_storage
      * @var ImageItem $item
      */
     $item_list = array();
-    $file_storage = $this->entityTypeManager->getStorage('file');
+
+    $files = $this->getEntitiesToView($items, $langcode);
+    // Early opt-out if the field is empty.
+    if (empty($files)) {
+      return $item_list;
+    }
 
     // Init image style fields.
     $thumb_image_style_field = new FieldThumbImageStyle();
@@ -177,10 +160,7 @@ class LightgalleryFormatter extends FormatterBase {
         ->getName()][$thumb_image_style_field->getName()];
     }
 
-    foreach ($items as $item) {
-      $item_values = $item->getValue();
-      $file = $file_storage->load($item_values['target_id']);
-
+    foreach ($files as $file) {
       if ($uri = $file->getFileUri()) {
         // Load image urls.
         if ($lightgallery_image_style) {
@@ -190,7 +170,7 @@ class LightgalleryFormatter extends FormatterBase {
         else {
           $item_detail['slide'] = $item_detail['thumb'] = file_create_url($uri);
         }
-        
+
         if ($thumb_image_style != $lightgallery_image_style) {
           // load thumb url.
           $item_detail['thumb'] = ImageStyle::load($thumb_image_style)
@@ -221,6 +201,8 @@ class LightgalleryFormatter extends FormatterBase {
     );
 
     return $content;
+
+
   }
 
 }
