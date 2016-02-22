@@ -2,6 +2,7 @@
 
 namespace Drupal\lightgallery\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
@@ -10,6 +11,7 @@ use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldLightgalleryImageStyle;
 use Drupal\lightgallery\Field\FieldThumbImageStyle;
+use Drupal\lightgallery\Field\FieldTitleSource;
 use Drupal\lightgallery\Field\FieldUseThumbs;
 use Drupal\lightgallery\Group\GroupInterface;
 use Drupal\lightgallery\Group\GroupsEnum;
@@ -26,6 +28,7 @@ use Drupal\lightgallery\Optionset\LightgalleryOptionset;
  * )
  */
 class LightgalleryFormatter extends FileFormatterBase {
+
 
   /**
    * {@inheritdoc}
@@ -94,6 +97,7 @@ class LightgalleryFormatter extends FileFormatterBase {
     $thumb_image_style = new FieldThumbImageStyle();
     $lightgallery_image_style = new FieldLightgalleryImageStyle();
     $use_thumbnails = new FieldUseThumbs();
+    $title_source = new FieldTitleSource();
 
 
     if (isset($image_styles[$this->settings[$lightgallery_image_style->getGroup()
@@ -122,6 +126,12 @@ class LightgalleryFormatter extends FileFormatterBase {
 
     $summary[] = ($this->settings[$use_thumbnails->getGroup()
       ->getName()][$use_thumbnails->getName()]) ? t('Use thumbs in gallery: Yes') : t('Use thumbs in gallery: No');
+
+    $summary[] = !empty($this->settings[$title_source->getGroup()
+      ->getName()][$title_source->getName()]) ? t('Value used as title: @title', array(
+      '@title' => $this->settings[$title_source->getGroup()
+        ->getName()][$title_source->getName()]
+    )) : t('Value used as title: none');
     return $summary;
   }
 
@@ -140,30 +150,28 @@ class LightgalleryFormatter extends FileFormatterBase {
       return $item_list;
     }
 
-    // Init image style fields.
-    $thumb_image_style_field = new FieldThumbImageStyle();
+    // Init lightgallery image style field.
     $lightgallery_image_style_field = new FieldLightgalleryImageStyle();
-    $lightgallery_image_style = FALSE;
-    $thumb_image_style = FALSE;
-
     // Fetch lightgallery image style.
-    if (isset($this->settings[$lightgallery_image_style_field->getGroup()
-        ->getName()][$lightgallery_image_style_field->getName()])) {
-      $lightgallery_image_style = $this->settings[$lightgallery_image_style_field->getGroup()
-        ->getName()][$lightgallery_image_style_field->getName()];
-    }
-
+    $lightgallery_image_style = $this->settings[$lightgallery_image_style_field->getGroup()
+      ->getName()][$lightgallery_image_style_field->getName()];
+    // Init thumb image style field.
+    $thumb_image_style_field = new FieldThumbImageStyle();
     // Fetch thumb image style.
-    if (isset($this->settings[$thumb_image_style_field->getGroup()
-        ->getName()][$thumb_image_style_field->getName()])) {
-      $thumb_image_style = $this->settings[$thumb_image_style_field->getGroup()
-        ->getName()][$thumb_image_style_field->getName()];
-    }
+    $thumb_image_style = $this->settings[$thumb_image_style_field->getGroup()
+      ->getName()][$thumb_image_style_field->getName()];
+    // Init title source field.
+    $title_source_field = new FieldTitleSource();
+    $title_source = $this->settings[$title_source_field->getGroup()
+      ->getName()][$title_source_field->getName()];
+
 
     foreach ($files as $file) {
       if ($uri = $file->getFileUri()) {
+        // The reffering item is the image.
+        $item = $file->_referringItem;
         // Load image urls.
-        if ($lightgallery_image_style) {
+        if (!empty($lightgallery_image_style)) {
           $item_detail['slide'] = $item_detail['thumb'] = ImageStyle::load($lightgallery_image_style)
             ->buildUrl($uri);
         }
@@ -171,13 +179,21 @@ class LightgalleryFormatter extends FileFormatterBase {
           $item_detail['slide'] = $item_detail['thumb'] = file_create_url($uri);
         }
 
+        // If image styles are different, also load thumb.
         if ($thumb_image_style != $lightgallery_image_style) {
-          // load thumb url.
-          $item_detail['thumb'] = ImageStyle::load($thumb_image_style)
-            ->buildUrl($uri);
+          if (!empty($thumb_image_style)) {
+            // load thumb url.
+            $item_detail['thumb'] = ImageStyle::load($thumb_image_style)
+              ->buildUrl($uri);
+          }
+          else {
+            $item_detail['thumb'] = file_create_url($uri);
+          }
         }
-        else {
-          $item_detail['thumb'] = file_create_url($uri);
+
+        if (!empty($title_source) && !empty($item->{$title_source})) {
+          // Set title of slide.
+          $item_detail['title'] = ['#markup' => Xss::filterAdmin($item->{$title_source})];
         }
       }
 

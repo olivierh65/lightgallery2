@@ -34,6 +34,7 @@ use Drupal\lightgallery\Field\FieldThumbImageStyle;
 use Drupal\lightgallery\Field\FieldThumbnail;
 use Drupal\lightgallery\Field\FieldThumbWidth;
 use Drupal\lightgallery\Field\FieldTitle;
+use Drupal\lightgallery\Field\FieldTitleSource;
 use Drupal\lightgallery\Field\FieldTouch;
 use Drupal\lightgallery\Field\FieldUseThumbs;
 use Drupal\lightgallery\Field\FieldZoom;
@@ -93,6 +94,7 @@ class LightgalleryManager {
       new FieldTitle(),
       new FieldThumbImageStyle(),
       new FieldLightgalleryImageStyle(),
+      new FieldTitleSource(),
       new FieldMode(),
       new FieldPreload(),
       new FieldClosable(),
@@ -142,6 +144,17 @@ class LightgalleryManager {
     }
 
     return $options;
+  }
+
+  /**
+   * Returns list of values that can be used as title field.
+   */
+  public static function getImageSourceFields() {
+    return array(
+      '' => t('None'),
+      'alt' => t('Image - Alt text'),
+      'title' => t('Image - Title text'),
+    );
   }
 
   /**

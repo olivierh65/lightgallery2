@@ -183,7 +183,6 @@ class LightGallery extends StylePluginBase {
   protected function confGetFieldSources() {
     $options = array(
       'field_options_images' => array(),
-      'field_options_images_type' => array(),
       'field_options' => array(),
     );
     $view = $this->view;
@@ -212,7 +211,6 @@ class LightGallery extends StylePluginBase {
           if ($field_type == 'image' || $field_type == 'file') {
             $field_cardinality = $field_definition->get('cardinality');
             $options['field_options_images'][$field] = $name . ($field_cardinality == 1 ? '' : '*');
-            $options['field_options_images_type'][$field] = 'file_field';
             $is_image = TRUE;
           }
         }
