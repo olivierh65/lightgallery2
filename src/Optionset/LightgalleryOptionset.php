@@ -3,7 +3,7 @@
 namespace Drupal\lightgallery\Optionset;
 
 
-class LightgalleryOptionset implements LightgalleryOptionSetInterface{
+class LightgalleryOptionset implements LightgalleryOptionSetInterface {
 
   protected $options;
   protected $useThumbs = FALSE;
@@ -18,16 +18,16 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface{
   public function __construct($options) {
     $this->options = $options;
 
-    if($this->options['thumbnails']){
+    if ($this->options['thumbnails']) {
       $this->useThumbs = TRUE;
     }
-    if($this->options['autoplay']){
+    if ($this->options['autoplay']) {
       $this->autoplay = TRUE;
     }
-    if($this->options['zoom']){
+    if ($this->options['zoom']) {
       $this->zoom = TRUE;
     }
-    if($this->options['hash']){
+    if ($this->options['hash']) {
       $this->hash = TRUE;
     }
   }
@@ -62,25 +62,25 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface{
       // Add extra thumb options.
       $option_set['animateThumb'] = !empty($this->options['animate_thumb']) ? TRUE : FALSE;
       $option_set['currentPagerPosition'] = !empty($this->options['current_pager_position']) ? $this->options['current_pager_position'] : 'middle';
-      $option_set['thumbWidth'] = !empty($this->options['thumb_width']) ? $this->options['thumb_width'] : 100;
-      $option_set['thumbContHeight'] = !empty($this->options['thumb_cont_height']) ? $this->options['thumb_cont_height'] : 100;
+      $option_set['thumbWidth'] = (int) !empty($this->options['thumb_width']) ? $this->options['thumb_width'] : 100;
+      $option_set['thumbContHeight'] = (int) !empty($this->options['thumb_cont_height']) ? $this->options['thumb_cont_height'] : 100;
     }
 
     if ($this->autoplay) {
       // Add extra autoplay options.
-      $option_set['pause'] = !empty($this->options['pause']) ? $this->options['pause'] : 5000;
+      $option_set['pause'] = (int) !empty($this->options['pause']) ? $this->options['pause'] : 5000;
       $option_set['progressBar'] = !empty($this->options['progress_bar']) ? TRUE : FALSE;
       $option_set['autoplayControls'] = !empty($this->options['autoplay_controls']) ? TRUE : FALSE;
     }
 
     if ($this->zoom) {
       // Add extra zoom options.
-      $option_set['scale'] = !empty($this->options['scale']) ? $this->options['scale'] : 1;
+      $option_set['scale'] = (int) !empty($this->options['scale']) ? $this->options['scale'] : 1;
     }
 
     if ($this->hash) {
       // Add extra hash (a lot more hash pleazzzzz) options.
-      $option_set['galleryId'] = !empty($this->options['gallery_id']) ? $this->options['gallery_id'] : 1;
+      $option_set['galleryId'] = (int) !empty($this->options['gallery_id']) ? $this->options['gallery_id'] : 1;
     }
 
     return $option_set;
