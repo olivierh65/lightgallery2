@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\lightgallery\Plugin\views\style\LightGallery.
- *
- */
-
 namespace Drupal\lightgallery\Plugin\views\style;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -244,12 +238,10 @@ class LightGallery extends StylePluginBase {
             // This is an image/thumb field.
             // Create URI for selected image style.
             $image_style = $this->view->field[$id]->options['settings']['image_style'];
-            /**
-             * @var FileInterface $file ;
-             */
+            
             $field_name = $fields[$id]->field;
             $file = $result[$count]->_entity->{$field_name}->entity;
-            if ($uri = $file->getFileUri()) {
+            if ($file instanceof FileInterface && $uri = $file->getFileUri()) {
               if (!empty($image_style)) {
                 $rendered_fields[$count][$id] = ImageStyle::load($image_style)
                   ->buildUrl($uri);
