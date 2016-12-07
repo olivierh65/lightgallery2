@@ -12,7 +12,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 function lightgallery_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.lightgallery':
-      $output = file_get_contents(drupal_get_path('module', 'lightgallery') . '/README.txt');
+      $output = file_get_contents(drupal_get_path('module', 'lightgallery') . '/README.md');
       return '<pre>' . $output . '</pre>';
   }
 }
