@@ -27,6 +27,12 @@ function template_preprocess_lightgallery_views_style(&$variables) {
   $rows = $variables['rows'];
   $fields = $view->field;
   $handler = $view->style_plugin;
+
+  // The lightgallery handler is not properly configured yet.
+  if (empty($handler->options['lightgallery'])) {
+    return;
+  }
+
   $options = $handler->options['lightgallery'];
   // Render fields with view style plugin.
   $rendered_rows = $handler->renderFields($rows);
