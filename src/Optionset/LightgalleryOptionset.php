@@ -56,6 +56,7 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
       'pager' => !empty($this->options['pager']) ? TRUE : FALSE,
       'zoom' => !empty($this->options['zoom']) ? TRUE : FALSE,
       'hash' => !empty($this->options['hash']) ? TRUE : FALSE,
+      'autoplayControls' => !empty($this->options['autoplay_controls']) ? TRUE : FALSE,
     );
 
     if ($this->useThumbs) {
@@ -70,7 +71,6 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
       // Add extra autoplay options.
       $option_set['pause'] = (int) !empty($this->options['pause']) ? $this->options['pause'] : 5000;
       $option_set['progressBar'] = !empty($this->options['progress_bar']) ? TRUE : FALSE;
-      $option_set['autoplayControls'] = !empty($this->options['autoplay_controls']) ? TRUE : FALSE;
     }
 
     if ($this->zoom) {
