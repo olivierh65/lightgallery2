@@ -63,24 +63,24 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
       // Add extra thumb options.
       $option_set['animateThumb'] = !empty($this->options['animate_thumb']) ? TRUE : FALSE;
       $option_set['currentPagerPosition'] = !empty($this->options['current_pager_position']) ? $this->options['current_pager_position'] : 'middle';
-      $option_set['thumbWidth'] = (int) !empty($this->options['thumb_width']) ? $this->options['thumb_width'] : 100;
-      $option_set['thumbContHeight'] = (int) !empty($this->options['thumb_cont_height']) ? $this->options['thumb_cont_height'] : 100;
+      $option_set['thumbWidth'] = !empty($this->options['thumb_width']) ? (int) $this->options['thumb_width'] : 100;
+      $option_set['thumbContHeight'] = !empty($this->options['thumb_cont_height']) ? (int) $this->options['thumb_cont_height'] : 100;
     }
 
     if ($this->autoplay) {
       // Add extra autoplay options.
-      $option_set['pause'] = (int) !empty($this->options['pause']) ? $this->options['pause'] : 5000;
+      $option_set['pause'] = !empty($this->options['pause']) ? (int) $this->options['pause'] : 5000;
       $option_set['progressBar'] = !empty($this->options['progress_bar']) ? TRUE : FALSE;
     }
 
     if ($this->zoom) {
       // Add extra zoom options.
-      $option_set['scale'] = (int) !empty($this->options['scale']) ? $this->options['scale'] : 1;
+      $option_set['scale'] = !empty($this->options['scale']) ? (int) $this->options['scale'] : 1;
     }
 
     if ($this->hash) {
       // Add extra hash (a lot more hash pleazzzzz) options.
-      $option_set['galleryId'] = (int) !empty($this->options['gallery_id']) ? $this->options['gallery_id'] : 1;
+      $option_set['galleryId'] = !empty($this->options['gallery_id']) ? (int) $this->options['gallery_id'] : 1;
     }
 
     return $option_set;
