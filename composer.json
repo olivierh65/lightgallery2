@@ -4,6 +4,6 @@
     "type": "drupal-module",
     "license": "GPL-2.0+",
     "require" : {
-        "sachinchoolur/lightgallery": "~1.2.21"
+        "sachinchoolur/lightgallery": "^1.6"
     }
 }
