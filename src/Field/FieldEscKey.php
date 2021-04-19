@@ -2,43 +2,45 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldEscKey extends FieldBase{
+/**
+ * Field esc key.
+ */
+class FieldEscKey extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'esc_key';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Escape key';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::CHECKBOX;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Whether the LightGallery could be closed by pressing the "Esc" key.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

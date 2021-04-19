@@ -3,30 +3,33 @@
 namespace Drupal\lightgallery\Group;
 
 use Drupal\lightgallery\Field\FieldAutoplay;
-use Drupal\lightgallery\Field\FieldInterface;
 
+/**
+ * Group light gallery autoplay.
+ */
 class GroupLightgalleryAutoplay extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_AUTOPLAY;
+    return GroupsEnum::LIGHTGALLERY_AUTOPLAY;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery autoplay settings';
+    return 'Lightgallery autoplay settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldAutoplay();
     return $field->getName();
   }
+
 }

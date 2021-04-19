@@ -26,10 +26,10 @@ function lightgallery_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_theme().
  */
 function lightgallery_theme() {
-  return array(
-    'lightgallery' => array(
-      'variables' => array('items' => array(), 'id' => NULL),
+  return [
+    'lightgallery' => [
+      'variables' => ['items' => [], 'id' => NULL],
       'template' => 'lightgallery',
-    ),
-  );
+    ],
+  ];
 }

@@ -2,7 +2,9 @@
 
 namespace Drupal\lightgallery\Group;
 
-
+/**
+ * Group interface.
+ */
 interface GroupInterface {
 
   /**
@@ -24,4 +26,5 @@ interface GroupInterface {
    * Returns value where "open" property is dependent to.
    */
   public function getOpenValue();
+
 }

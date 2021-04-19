@@ -4,54 +4,57 @@ namespace Drupal\lightgallery\Field;
 
 use Drupal\lightgallery\Group\GroupLightgalleryThumbs;
 
-class FieldCurrentPagerPosition extends FieldBase{
+/**
+ * Field current pager position.
+ */
+class FieldCurrentPagerPosition extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return 'middle';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setOptions() {
     return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getCurrentPagerPositionOptions'];
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'current_pager_position';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Position';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::SELECT;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Position of selected thumbnail.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryThumbs();
   }
 

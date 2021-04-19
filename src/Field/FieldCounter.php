@@ -2,43 +2,45 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldCounter extends FieldBase{
+/**
+ * Field counter.
+ */
+class FieldCounter extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'counter';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Counter';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::CHECKBOX;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Whether to show total number of images and index number of currently displayed image.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

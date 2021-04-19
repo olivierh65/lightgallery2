@@ -2,7 +2,6 @@
 
 namespace Drupal\lightgallery\Manager;
 
-
 use Drupal\image\Entity\ImageStyle;
 use Drupal\lightgallery\Field\FieldAnimateThumb;
 use Drupal\lightgallery\Field\FieldAutoplay;
@@ -15,7 +14,6 @@ use Drupal\lightgallery\Field\FieldDownload;
 use Drupal\lightgallery\Field\FieldDrag;
 use Drupal\lightgallery\Field\FieldEscKey;
 use Drupal\lightgallery\Field\FieldFullscreen;
-use Drupal\lightgallery\Field\FieldGallerId;
 use Drupal\lightgallery\Field\FieldGalleryId;
 use Drupal\lightgallery\Field\FieldHash;
 use Drupal\lightgallery\Field\FieldImage;
@@ -40,40 +38,47 @@ use Drupal\lightgallery\Field\FieldUseThumbs;
 use Drupal\lightgallery\Field\FieldZoom;
 use Drupal\lightgallery\Optionset\LightgalleryOptionSetInterface;
 
+/**
+ * Light gallery manager.
+ */
 class LightgalleryManager {
 
   protected $optionSet;
 
   /**
    * LightgalleryManager constructor.
+   *
    * @param \Drupal\lightgallery\Optionset\LightgalleryOptionSetInterface $option_set
+   *   The option set.
    */
   public function __construct(LightgalleryOptionSetInterface $option_set) {
     $this->optionSet = $option_set;
   }
 
-
   /**
    * Loads libraries to init lightgallery.
-   * @param $id
+   *
+   * @param int $id
+   *   The id.
+   *
    * @return array
+   *   The array.
    */
   public function loadLibraries($id) {
     $attached = [];
 
-    // JavaScript settings
-    $js_settings = array(
-      'instances' => array(
+    // JavaScript settings.
+    $js_settings = [
+      'instances' => [
         $id => $this->optionSet->get(),
-      ),
-    );
+      ],
+    ];
     // Add settings.
     $attached['drupalSettings']['lightgallery'] = $js_settings;
     // Add loader file.
     // We don't need to add the lightgallery library manually,
     // Because there is a dependency on it.
     $attached['library'][] = 'lightgallery/lightgallery.load';
-
 
     return $attached;
   }
@@ -82,7 +87,7 @@ class LightgalleryManager {
    * Returns all fields that have to be displayed on settings form.
    */
   public static function getSettingFields() {
-    return array(
+    return [
       // LIGHTGALLERY CORE FIELDS.
       new FieldThumbnail(),
       new FieldImage(),
@@ -123,17 +128,17 @@ class LightgalleryManager {
       // LIGHTGALLERY HASH FIELDS.
       new FieldHash(),
       new FieldGalleryId(),
-    );
+    ];
   }
 
   /**
    * Returns formatted array of all image styles.
    */
   public static function getImageStyles() {
-    $options = array('' => t('Original image'));
+    $options = ['' => t('Original image')];
     $image_styles = ImageStyle::loadMultiple();
 
-    /** @var ImageStyle $image_style */
+    /** @var \Drupal\image\Entity\ImageStyle $image_style */
     foreach ($image_styles as $image_style) {
       $options[$image_style->id()] = $image_style->label();
     }
@@ -145,19 +150,21 @@ class LightgalleryManager {
    * Returns list of values that can be used as title field.
    */
   public static function getImageSourceFields() {
-    return array(
+    return [
       '' => t('None'),
       'alt' => t('Image - Alt text'),
       'title' => t('Image - Title text'),
-    );
+    ];
   }
 
   /**
    * Returns all available lightgallery modes.
+   *
    * @return array
+   *   The array.
    */
   public static function getLightgalleryModes() {
-    $modes = array(
+    $modes = [
       'lg-slide',
       'lg-fade',
       'lg-zoom-in',
@@ -188,47 +195,57 @@ class LightgalleryManager {
       'lg-lollipop-rev',
       'lg-rotate',
       'lg-rotate-rev',
-      'lg-tube'
-    );
+      'lg-tube',
+    ];
 
     return array_combine($modes, $modes);
   }
 
   /**
    * Returns preload options.
+   *
    * @return array
+   *   The array.
    */
   public static function getPreloadOptions() {
-    return array_combine(array(1, 2, 3, 4), array(1, 2, 3, 4));
+    return array_combine([1, 2, 3, 4], [1, 2, 3, 4]);
   }
 
   /**
    * Returns scale options.
+   *
    * @return array
+   *   The array.
    */
   public static function getScaleOptions() {
-    return array_combine(array(1, 2, 3, 4), array(1, 2, 3, 4));
+    return array_combine([1, 2, 3, 4], [1, 2, 3, 4]);
   }
 
   /**
    * Returns current pager options.
+   *
    * @return array
+   *   The array.
    */
   public static function getCurrentPagerPositionOptions() {
-    return array(
+    return [
       'left' => t('Left'),
       'middle' => t('Middle'),
-      'right' => t('Right')
-    );
+      'right' => t('Right'),
+    ];
   }
 
   /**
    * Flatten array and preserve keys.
+   *
    * @param array $array
+   *   The array.
+   *
    * @return array
+   *   The array.
    */
   public static function flattenArray(array $array) {
-    $flattened_array = array();
+    $flattened_array = [];
     array_walk_recursive($array,
       function ($a, $key) use (&$flattened_array) {
         $flattened_array[$key] = $a;

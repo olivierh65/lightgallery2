@@ -4,47 +4,50 @@ namespace Drupal\lightgallery\Field;
 
 use Drupal\lightgallery\Group\GroupLightgalleryThumbs;
 
-class FieldThumbWidth extends FieldBase{
+/**
+ * Field thumb width.
+ */
+class FieldThumbWidth extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return 100;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'thumb_width';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Width';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::TEXTFIELD;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Width of each thumbnail.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryThumbs();
   }
 

@@ -2,43 +2,45 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldClosable extends FieldBase{
+/**
+ * Field closable.
+ */
+class FieldClosable extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'closable';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Closable';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::CHECKBOX;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Allows clicks on dimmer to close gallery.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

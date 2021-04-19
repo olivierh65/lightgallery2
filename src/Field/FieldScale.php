@@ -2,57 +2,59 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryZoom;
 
-class FieldScale extends FieldBase{
+/**
+ * Field scale.
+ */
+class FieldScale extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return 1;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setOptions() {
     return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getScaleOptions'];
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'scale';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Scale';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::SELECT;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Value of zoom that should be incremented/decremented.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryZoom();
   }
 

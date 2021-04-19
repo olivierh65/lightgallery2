@@ -2,43 +2,45 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryAutoplay;
 
-class FieldAutoplayControls extends FieldBase{
+/**
+ * Field autoplay controls.
+ */
+class FieldAutoplayControls extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'autoplay_controls';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Autoplay controls';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::CHECKBOX;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Show/hide autoplay controls.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryAutoplay();
   }
 

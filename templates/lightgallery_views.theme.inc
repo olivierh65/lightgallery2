@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * The module view theme.
+ */
+
 use Drupal\lightgallery\Optionset\LightgalleryOptionset;
 use Drupal\lightgallery\Manager\LightgalleryManager;
 
@@ -13,13 +18,13 @@ use Drupal\lightgallery\Manager\LightgalleryManager;
  *   - view: A ViewExecutable object.
  *   - rows: The raw row data.
  */
-function template_preprocess_lightgallery_views_style(&$variables) {
+function template_preprocess_lightgallery_views_style(array &$variables) {
   // Only run the preprocessor if it is a view.
   if (empty($variables['view'])) {
     return;
   }
 
-  /**
+  /*
    * @var \Drupal\lightgallery\Plugin\views\style\LightGallery $handler
    * @var \Drupal\views\Plugin\views\field\Field $field
    */
@@ -41,7 +46,7 @@ function template_preprocess_lightgallery_views_style(&$variables) {
   $image_field = $options['image_field'];
   $title_field = $options['title'];
 
-  $items = array();
+  $items = [];
   foreach ($rendered_rows as $id => $row) {
     /** @var \Drupal\views\ResultRow $row */
     $rendered_slide = FALSE;
@@ -84,12 +89,12 @@ function template_preprocess_lightgallery_views_style(&$variables) {
   $lightgallery_optionset = new LightgalleryOptionset($options);
   $lightgallery_manager = new LightgalleryManager($lightgallery_optionset);
   // Build render array.
-  $content = array(
+  $content = [
     '#theme' => 'lightgallery',
     '#items' => $items,
     '#id' => $unique_id,
     '#attached' => $lightgallery_manager->loadLibraries($unique_id),
-  );
+  ];
 
   // Add the slide items to the variables.
   $variables['content'] = $content;

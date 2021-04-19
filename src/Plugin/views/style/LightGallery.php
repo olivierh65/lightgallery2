@@ -5,10 +5,7 @@ namespace Drupal\lightgallery\Plugin\views\style;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
-use Drupal\lightgallery\Field\FieldInterface;
-use Drupal\lightgallery\Group\GroupInterface;
 use Drupal\lightgallery\Manager\LightgalleryManager;
-use Drupal\views\Plugin\views\field\FieldHandlerInterface;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -62,14 +59,22 @@ class LightGallery extends StylePluginBase {
 
   /**
    * Contains all available fields on view.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $fieldSources;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityFieldManagerInterface $entity_field_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityFieldManager = $entity_field_manager;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     // Create a new instance of the plugin. This also allows us to extract
     // services from the container and inject them into our plugin via its own
@@ -105,30 +110,30 @@ class LightGallery extends StylePluginBase {
     }
 
     $fields_settings = LightgalleryManager::getSettingFields();
-    /**
-     * @var FieldInterface $field
-     * @var GroupInterface $group
+    /*
+     * @var \Drupal\lightgallery\Field\FieldInterface $field
+     * @var \Drupal\lightgallery\Group\GroupInterface $group
      */
     foreach ($fields_settings as $field) {
       $group = $field->getGroup();
       if (empty($form[$group->getName()])) {
         // Attach group to form.
-        $form[$group->getName()] = array(
+        $form[$group->getName()] = [
           '#type' => 'details',
           '#title' => $group->getTitle(),
           '#open' => !empty($group->getOpenValue()) ? $this->options['lightgallery'][$group->getOpenValue()] : $group->isOpen(),
-        );
+        ];
       }
 
       if ($field->appliesToViews()) {
         // Attach field to group and form.
-        $form[$group->getName()][$field->getName()] = array(
+        $form[$group->getName()][$field->getName()] = [
           '#type' => $field->getType(),
-          '#title' => $this->t($field->getTitle()),
+          '#title' => $field->getTitle(),
           '#default_value' => isset($this->options['lightgallery'][$field->getName()]) ? $this->options['lightgallery'][$field->getName()] : $field->getDefaultValue(),
-          '#description' => $this->t($field->getDescription()),
+          '#description' => $field->getDescription(),
           '#required' => $field->isRequired(),
-        );
+        ];
 
         if ($field->getName() == 'thumb_field' || $field->getName() == 'image_field') {
           // Add exception for these fields.
@@ -148,42 +153,45 @@ class LightGallery extends StylePluginBase {
 
   /**
    * Form validator.
-   * @param $form
+   *
+   * @param array $form
+   *   The form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
    */
-  public function validateOptionsForm(&$form, FormStateInterface $form_state) {
+  public function validateOptionsForm(array &$form, FormStateInterface $form_state) {
     parent::validateOptionsForm($form, $form_state);
 
     // Flatten style options array.
     $style_options = $form_state->getValue('style_options');
-    $form_state->setValue(array(
+    $form_state->setValue([
       'style_options',
-      'lightgallery'
-    ), LightgalleryManager::flattenArray($style_options));
+      'lightgallery',
+    ], LightgalleryManager::flattenArray($style_options));
 
     // Unset nested values.
-    $form_state->unsetValue(array('style_options', 'lightgallery_core'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_thumbs'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_autoplay'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_full_screen'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_pager'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_zoom'));
-    $form_state->unsetValue(array('style_options', 'lightgallery_hash'));
+    $form_state->unsetValue(['style_options', 'lightgallery_core']);
+    $form_state->unsetValue(['style_options', 'lightgallery_thumbs']);
+    $form_state->unsetValue(['style_options', 'lightgallery_autoplay']);
+    $form_state->unsetValue(['style_options', 'lightgallery_full_screen']);
+    $form_state->unsetValue(['style_options', 'lightgallery_pager']);
+    $form_state->unsetValue(['style_options', 'lightgallery_zoom']);
+    $form_state->unsetValue(['style_options', 'lightgallery_hash']);
   }
 
   /**
    * Utility to determine which view fields can be used for image data.
    */
   protected function confGetFieldSources() {
-    $options = array(
-      'field_options_images' => array(),
-      'field_options' => array(),
-    );
+    $options = [
+      'field_options_images' => [],
+      'field_options' => [],
+    ];
     $view = $this->view;
     $field_handlers = $view->display_handler->getHandlers('field');
     $field_labels = $view->display_handler->getFieldLabels();
 
-    /** @var FieldHandlerInterface $handler */
+    /** @var \Drupal\views\Plugin\views\field\FieldHandlerInterface $handler */
     // Separate image fields from non-image fields. For image fields we can
     // work with fids and fields of type image or file.
     foreach ($field_handlers as $field => $handler) {
@@ -197,7 +205,8 @@ class LightGallery extends StylePluginBase {
         // info.
         $entity_type = $handler->getEntityType();
 
-        // Fetch the real field name, because views alters the field name if the same fields gets added multiple times.
+        // Fetch the real field name, because views alters the field name if the
+        // same fields gets added multiple times.
         $field_name = $handler->field;
         $field_definition = $this->entityFieldManager->getFieldStorageDefinitions($entity_type)[$field_name];
         if ($field_definition) {
@@ -218,10 +227,12 @@ class LightGallery extends StylePluginBase {
   }
 
   /**
+   * Render fields.
+   *
    * @Override parent.
    */
   public function renderFields(array $result) {
-    $rendered_fields = array();
+    $rendered_fields = [];
     $this->view->row_index = 0;
     $keys = array_keys($this->view->field);
 
@@ -270,14 +281,14 @@ class LightGallery extends StylePluginBase {
    * Returns available image fields on view.
    */
   private function getImageFields() {
-    return !empty($this->fieldSources['field_options_images']) ? $this->fieldSources['field_options_images'] : array();
+    return !empty($this->fieldSources['field_options_images']) ? $this->fieldSources['field_options_images'] : [];
   }
 
   /**
    * Returns available fields on view apart from images.
    */
   private function getNonImageFields() {
-    return !empty($this->fieldSources['field_options']) ? $this->fieldSources['field_options'] : array();
+    return !empty($this->fieldSources['field_options']) ? $this->fieldSources['field_options'] : [];
   }
 
 }

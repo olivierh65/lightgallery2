@@ -2,64 +2,66 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldLightgalleryImageStyle extends FieldBase{
+/**
+ * Field light gallery image style.
+ */
+class FieldLightgalleryImageStyle extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function appliesToViews() {
     return FALSE;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return NULL;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setOptions() {
     return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getImageStyles'];
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'lightgallery_image_style';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Lightgallery image style';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::SELECT;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'The image style used when viewing the lightgallery.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

@@ -2,57 +2,59 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldMode extends FieldBase{
+/**
+ * Field mode.
+ */
+class FieldMode extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return NULL;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setOptions() {
     return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getLightgalleryModes'];
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'mode';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Transition';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::SELECT;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Type of transition between images.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

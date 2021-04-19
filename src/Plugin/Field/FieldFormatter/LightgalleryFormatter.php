@@ -7,18 +7,17 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\image\Plugin\Field\FieldType\ImageItem;
-use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldLightgalleryImageStyle;
 use Drupal\lightgallery\Field\FieldThumbImageStyle;
 use Drupal\lightgallery\Field\FieldTitleSource;
 use Drupal\lightgallery\Field\FieldUseThumbs;
-use Drupal\lightgallery\Group\GroupInterface;
 use Drupal\lightgallery\Group\GroupsEnum;
 use Drupal\lightgallery\Manager\LightgalleryManager;
 use Drupal\lightgallery\Optionset\LightgalleryOptionset;
 
 /**
+ * Light gallery formatter.
+ *
  * @FieldFormatter(
  *   id = "lightgallery",
  *   label = @Translation("Lightgallery"),
@@ -29,16 +28,15 @@ use Drupal\lightgallery\Optionset\LightgalleryOptionset;
  */
 class LightgalleryFormatter extends FileFormatterBase {
 
-
   /**
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    $default_settings = array();
+    $default_settings = [];
     $lightgallery_groups = GroupsEnum::toArray();
 
     foreach ($lightgallery_groups as $lightgallery_group) {
-      $default_settings[$lightgallery_group] = array();
+      $default_settings[$lightgallery_group] = [];
     }
     return $default_settings + parent::defaultSettings();
   }
@@ -48,30 +46,30 @@ class LightgalleryFormatter extends FileFormatterBase {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $fields_settings = LightgalleryManager::getSettingFields();
-    /**
-     * @var FieldInterface $field
-     * @var GroupInterface $group
+    /*
+     * @var \Drupal\lightgallery\Field\FieldInterface $field
+     * @var \Drupal\lightgallery\Group\GroupInterface $group
      */
     foreach ($fields_settings as $field) {
       $group = $field->getGroup();
       if (empty($element[$group->getName()])) {
         // Attach group to form.
-        $element[$group->getName()] = array(
+        $element[$group->getName()] = [
           '#type' => 'details',
           '#title' => $group->getTitle(),
           '#open' => $group->isOpen(),
-        );
+        ];
       }
 
       if ($field->appliesToFieldFormatter()) {
         // Attach field to group and form.
-        $element[$group->getName()][$field->getName()] = array(
+        $element[$group->getName()][$field->getName()] = [
           '#type' => $field->getType(),
-          '#title' => $this->t($field->getTitle()),
+          '#title' => $field->getTitle(),
           '#default_value' => isset($this->settings[$group->getName()][$field->getName()]) ? $this->settings[$group->getName()][$field->getName()] : $field->getDefaultValue(),
-          '#description' => $this->t($field->getDescription()),
+          '#description' => $field->getDescription(),
           '#required' => $field->isRequired(),
-        );
+        ];
 
         if (!empty($field->getOptions())) {
           // Set field options.
@@ -89,7 +87,7 @@ class LightgalleryFormatter extends FileFormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = array();
+    $summary = [];
     $image_styles = LightgalleryManager::getImageStyles();
     // Unset possible 'No defined styles' option.
     unset($image_styles['']);
@@ -99,26 +97,25 @@ class LightgalleryFormatter extends FileFormatterBase {
     $use_thumbnails = new FieldUseThumbs();
     $title_source = new FieldTitleSource();
 
-
     if (isset($image_styles[$this->settings[$lightgallery_image_style->getGroup()
-        ->getName()][$lightgallery_image_style->getName()]])) {
+      ->getName()][$lightgallery_image_style->getName()]])) {
       $summary[] = t('Lightgallery image style: @style',
-        array(
+        [
           '@style' => $image_styles[$this->settings[$lightgallery_image_style->getGroup()
-            ->getName()][$lightgallery_image_style->getName()]]
-        ));
+            ->getName()][$lightgallery_image_style->getName()]],
+        ]);
     }
     else {
       $summary[] = t('Lightgallery image style: Original image');
     }
 
     if (isset($image_styles[$this->settings[$thumb_image_style->getGroup()
-        ->getName()][$thumb_image_style->getName()]])) {
+      ->getName()][$thumb_image_style->getName()]])) {
       $summary[] = t('Thumbnail image style: @style',
-        array(
+        [
           '@style' => $image_styles[$this->settings[$thumb_image_style->getGroup()
-            ->getName()][$thumb_image_style->getName()]]
-        ));
+            ->getName()][$thumb_image_style->getName()]],
+        ]);
     }
     else {
       $summary[] = t('Thumbnail image style: Original image');
@@ -128,10 +125,10 @@ class LightgalleryFormatter extends FileFormatterBase {
       ->getName()][$use_thumbnails->getName()]) ? t('Use thumbs in gallery: Yes') : t('Use thumbs in gallery: No');
 
     $summary[] = !empty($this->settings[$title_source->getGroup()
-      ->getName()][$title_source->getName()]) ? t('Value used as title: @title', array(
-      '@title' => $this->settings[$title_source->getGroup()
-        ->getName()][$title_source->getName()]
-    )) : t('Value used as title: none');
+      ->getName()][$title_source->getName()]) ? t('Value used as title: @title', [
+        '@title' => $this->settings[$title_source->getGroup()
+          ->getName()][$title_source->getName()],
+      ]) : t('Value used as title: none');
     return $summary;
   }
 
@@ -139,10 +136,10 @@ class LightgalleryFormatter extends FileFormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    /**
-     * @var ImageItem $item
+    /*
+     * @var \Drupal\image\Plugin\Field\FieldType\ImageItem $item
      */
-    $item_list = array();
+    $item_list = [];
 
     $files = $this->getEntitiesToView($items, $langcode);
     // Early opt-out if the field is empty.
@@ -165,7 +162,6 @@ class LightgalleryFormatter extends FileFormatterBase {
     $title_source = $this->settings[$title_source_field->getGroup()
       ->getName()][$title_source_field->getName()];
 
-
     foreach ($files as $file) {
       if ($uri = $file->getFileUri()) {
         // The reffering item is the image.
@@ -182,7 +178,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         // If image styles are different, also load thumb.
         if ($thumb_image_style != $lightgallery_image_style) {
           if (!empty($thumb_image_style)) {
-            // load thumb url.
+            // Load thumb url.
             $item_detail['thumb'] = ImageStyle::load($thumb_image_style)
               ->buildUrl($uri);
           }
@@ -200,7 +196,6 @@ class LightgalleryFormatter extends FileFormatterBase {
       $item_list[] = $item_detail;
     }
 
-
     // Flatten settings array.
     $options = LightgalleryManager::flattenArray($this->settings);
     // Set unique id, so that multiple instances on one page can be created.
@@ -209,15 +204,14 @@ class LightgalleryFormatter extends FileFormatterBase {
     $lightgallery_optionset = new LightgalleryOptionset($options);
     $lightgallery_manager = new LightgalleryManager($lightgallery_optionset);
     // Build render array.
-    $content = array(
+    $content = [
       '#theme' => 'lightgallery',
       '#items' => $item_list,
       '#id' => $unique_id,
       '#attached' => $lightgallery_manager->loadLibraries($unique_id),
-    );
+    ];
 
     return $content;
-
 
   }
 

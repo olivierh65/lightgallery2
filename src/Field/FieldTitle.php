@@ -2,64 +2,66 @@
 
 namespace Drupal\lightgallery\Field;
 
-
 use Drupal\lightgallery\Group\GroupLightgalleryCore;
 
-class FieldTitle extends FieldBase{
+/**
+ * Field title.
+ */
+class FieldTitle extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function appliesToFieldFormatter() {
     return FALSE;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return NULL;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setOptions() {
     return ['Drupal\lightgallery\Plugin\views\style\LightGallery', 'getNonImageFields'];
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'title';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Title field';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::SELECT;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Select the field you want to use as title in the Lightgallery. Leave empty to omit titles.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryCore();
   }
 

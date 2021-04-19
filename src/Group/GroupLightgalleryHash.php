@@ -2,30 +2,32 @@
 
 namespace Drupal\lightgallery\Group;
 
-use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldHash;
 
+/**
+ * Group light gallery hash.
+ */
 class GroupLightgalleryHash extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_HASH;
+    return GroupsEnum::LIGHTGALLERY_HASH;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery hash settings';
+    return 'Lightgallery hash settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldHash();
     return $field->getName();
   }

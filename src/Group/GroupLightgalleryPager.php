@@ -2,30 +2,32 @@
 
 namespace Drupal\lightgallery\Group;
 
-use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldPager;
 
+/**
+ * Group light gallery pager.
+ */
 class GroupLightgalleryPager extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_PAGER;
+    return GroupsEnum::LIGHTGALLERY_PAGER;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery pager settings';
+    return 'Lightgallery pager settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldPager();
     return $field->getName();
   }

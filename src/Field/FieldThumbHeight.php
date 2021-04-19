@@ -4,47 +4,50 @@ namespace Drupal\lightgallery\Field;
 
 use Drupal\lightgallery\Group\GroupLightgalleryThumbs;
 
-class FieldThumbHeight extends FieldBase{
+/**
+ * Field thumb height.
+ */
+class FieldThumbHeight extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   protected function setDefaultValue() {
     return 100;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'thumb_cont_height';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Height';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::TEXTFIELD;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Height of the thumbnail container including padding and border.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryThumbs();
   }
 

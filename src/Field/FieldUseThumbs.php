@@ -4,40 +4,43 @@ namespace Drupal\lightgallery\Field;
 
 use Drupal\lightgallery\Group\GroupLightgalleryThumbs;
 
-class FieldUseThumbs extends FieldBase{
+/**
+ * Field use thumbs.
+ */
+class FieldUseThumbs extends FieldBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setName(){
+  protected function setName() {
     return 'thumbnails';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setTitle(){
+  protected function setTitle() {
     return 'Use thumbnails';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setType(){
+  protected function setType() {
     return FieldTypesEnum::CHECKBOX;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setDescription(){
+  protected function setDescription() {
     return 'Indicate if you want to use thumbnails in the LightGallery.';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
-  protected function setGroup(){
+  protected function setGroup() {
     return new GroupLightgalleryThumbs();
   }
 

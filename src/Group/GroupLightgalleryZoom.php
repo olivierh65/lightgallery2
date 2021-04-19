@@ -2,30 +2,32 @@
 
 namespace Drupal\lightgallery\Group;
 
-use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldZoom;
 
+/**
+ * Group light gallery zoom.
+ */
 class GroupLightgalleryZoom extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_ZOOM;
+    return GroupsEnum::LIGHTGALLERY_ZOOM;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery zoom settings';
+    return 'Lightgallery zoom settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldZoom();
     return $field->getName();
   }

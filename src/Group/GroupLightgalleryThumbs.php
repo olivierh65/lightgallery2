@@ -2,31 +2,32 @@
 
 namespace Drupal\lightgallery\Group;
 
-
-use Drupal\lightgallery\Field\FieldInterface;
 use Drupal\lightgallery\Field\FieldUseThumbs;
 
+/**
+ * Group light gallery thumbs.
+ */
 class GroupLightgalleryThumbs extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_THUMBS;
+    return GroupsEnum::LIGHTGALLERY_THUMBS;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery thumbnail settings';
+    return 'Lightgallery thumbnail settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldUseThumbs();
     return $field->getName();
   }

@@ -2,6 +2,9 @@
 
 namespace Drupal\lightgallery\Field;
 
+/**
+ * Field interface.
+ */
 interface FieldInterface {
 
   /**
@@ -53,4 +56,5 @@ interface FieldInterface {
    * Returns field options callback.
    */
   public function getOptions();
+
 }

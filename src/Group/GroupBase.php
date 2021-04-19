@@ -2,21 +2,23 @@
 
 namespace Drupal\lightgallery\Group;
 
-
-abstract class GroupBase implements GroupInterface{
+/**
+ * Group base.
+ */
+abstract class GroupBase implements GroupInterface {
 
   /**
-   * @Inherit doc
+   * {@inheritdoc}
    */
   public function isOpen() {
-   return FALSE;
+    return FALSE;
   }
 
   /**
-   * @Inherit doc
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-   return FALSE;
+    return FALSE;
   }
 
 }

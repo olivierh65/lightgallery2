@@ -2,7 +2,9 @@
 
 namespace Drupal\lightgallery\Field;
 
-
+/**
+ * Field base.
+ */
 abstract class FieldBase implements FieldInterface {
 
   protected $name;
@@ -14,6 +16,9 @@ abstract class FieldBase implements FieldInterface {
   protected $defaultValue;
   protected $options;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct() {
     $this->name = $this->setName();
     $this->title = $this->setTitle();
@@ -26,70 +31,70 @@ abstract class FieldBase implements FieldInterface {
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
     return $this->name;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
     return $this->title;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getType() {
     return $this->type;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getDescription() {
     return $this->description;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function isRequired() {
     return $this->isRequired;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getGroup() {
     return $this->group;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getDefaultValue() {
     return $this->defaultValue;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function appliesToViews() {
     return TRUE;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOptions() {
     return $this->options;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function appliesToFieldFormatter() {
     return TRUE;
@@ -119,26 +124,26 @@ abstract class FieldBase implements FieldInterface {
   /**
    * Sets name.
    */
-  protected abstract function setName();
+  abstract protected function setName();
 
   /**
    * Sets title.
    */
-  protected abstract function setTitle();
+  abstract protected function setTitle();
 
   /**
    * Sets type.
    */
-  protected abstract function setType();
+  abstract protected function setType();
 
   /**
    * Sets description.
    */
-  protected abstract function setDescription();
+  abstract protected function setDescription();
 
   /**
    * Sets group.
    */
-  protected abstract function setGroup();
+  abstract protected function setGroup();
 
 }

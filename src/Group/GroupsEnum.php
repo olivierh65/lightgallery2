@@ -2,7 +2,9 @@
 
 namespace Drupal\lightgallery\Group;
 
-
+/**
+ * Groups enum.
+ */
 abstract class GroupsEnum {
   const LIGHTGALLERY_CORE = 'lightgallery_core';
   const LIGHTGALLERY_THUMBS = 'lightgallery_thumbs';
@@ -16,7 +18,7 @@ abstract class GroupsEnum {
    * Returns array of all groups.
    */
   public static function toArray() {
-    return array(
+    return [
       self::LIGHTGALLERY_CORE,
       self::LIGHTGALLERY_THUMBS,
       self::LIGHTGALLERY_AUTOPLAY,
@@ -24,6 +26,7 @@ abstract class GroupsEnum {
       self::LIGHTGALLERY_PAGER,
       self::LIGHTGALLERY_ZOOM,
       self::LIGHTGALLERY_HASH,
-    );
+    ];
   }
+
 }

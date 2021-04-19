@@ -2,24 +2,27 @@
 
 namespace Drupal\lightgallery\Group;
 
+/**
+ * Group light gallery core.
+ */
 class GroupLightgalleryCore extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_CORE;
+    return GroupsEnum::LIGHTGALLERY_CORE;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery core settings';
+    return 'Lightgallery core settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function isOpen() {
     return TRUE;

@@ -2,7 +2,9 @@
 
 namespace Drupal\lightgallery\Optionset;
 
-
+/**
+ * Light gallery option set.
+ */
 class LightgalleryOptionset implements LightgalleryOptionSetInterface {
 
   protected $options;
@@ -13,9 +15,11 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
 
   /**
    * LightgalleryOptionset constructor.
-   * @param $options
+   *
+   * @param array $options
+   *   The options variable.
    */
-  public function __construct($options) {
+  public function __construct(array $options) {
     $this->options = $options;
 
     if ($this->options['thumbnails']) {
@@ -34,10 +38,12 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
 
   /**
    * Returns the formatted optionset.
+   *
    * @return array
+   *   The array.
    */
   public function get() {
-    $option_set = array(
+    $option_set = [
       'mode' => !empty($this->options['mode']) ? $this->options['mode'] : 'lg-slide',
       'preload' => !empty($this->options['preload']) ? $this->options['preload'] : 1,
       'loop' => !empty($this->options['loop']) ? TRUE : FALSE,
@@ -57,7 +63,7 @@ class LightgalleryOptionset implements LightgalleryOptionSetInterface {
       'zoom' => !empty($this->options['zoom']) ? TRUE : FALSE,
       'hash' => !empty($this->options['hash']) ? TRUE : FALSE,
       'autoplayControls' => !empty($this->options['autoplay_controls']) ? TRUE : FALSE,
-    );
+    ];
 
     if ($this->useThumbs) {
       // Add extra thumb options.

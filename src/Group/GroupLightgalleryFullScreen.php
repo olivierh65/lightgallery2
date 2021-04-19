@@ -2,31 +2,32 @@
 
 namespace Drupal\lightgallery\Group;
 
-
 use Drupal\lightgallery\Field\FieldFullscreen;
-use Drupal\lightgallery\Field\FieldInterface;
 
+/**
+ * Group light gallery full screen.
+ */
 class GroupLightgalleryFullScreen extends GroupBase {
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getName() {
-   return GroupsEnum::LIGHTGALLERY_FULL_SCREEN;
+    return GroupsEnum::LIGHTGALLERY_FULL_SCREEN;
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getTitle() {
-   return 'Lightgallery fullscreen settings';
+    return 'Lightgallery fullscreen settings';
   }
 
   /**
-   * @Inherit doc.
+   * {@inheritdoc}
    */
   public function getOpenValue() {
-    /** @var FieldInterface $field */
+    /** @var \Drupal\lightgallery\Field\FieldInterface $field */
     $field = new FieldFullscreen();
     return $field->getName();
   }
