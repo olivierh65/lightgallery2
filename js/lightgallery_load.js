@@ -9,7 +9,7 @@
     attach: function (context, settings) {
       var that = this;
       // Init all galleries.
-      for (id in settings.lightgallery.instances) {
+      for (var id in settings.lightgallery.instances) {
         // Store galleries so that developers can change options.
         that.galleries[id] = settings.lightgallery.instances[id];
         _lightgallery_init(id, that.galleries[id], context);
