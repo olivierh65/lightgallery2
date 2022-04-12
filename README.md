@@ -13,9 +13,9 @@ jQuery. This module integrates with the Views module.
     "package": {
      "name": "sachinchoolur/lightgallery",
      "type": "drupal-library",
-     "version": "1.6.11",
+     "version": "1.6.12",
      "dist": {
-      "url": "https://github.com/sachinchoolur/lightGallery/archive/1.6.11.zip",
+      "url": "https://github.com/sachinchoolur/lightGallery/archive/1.6.12.zip",
       "type": "zip"
      }
     }
