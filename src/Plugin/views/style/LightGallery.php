@@ -154,12 +154,12 @@ class LightGallery extends StylePluginBase {
   /**
    * Form validator.
    *
-   * @param array $form
+   * @param mixed $form
    *   The form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function validateOptionsForm(array &$form, FormStateInterface $form_state) {
+  public function validateOptionsForm(&$form, FormStateInterface $form_state) {
     parent::validateOptionsForm($form, $form_state);
 
     // Flatten style options array.
