@@ -6,7 +6,6 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\lightgallery\Field\FieldLightgalleryImageStyle;
 use Drupal\lightgallery\Field\FieldThumbImageStyle;
 use Drupal\lightgallery\Field\FieldTitleSource;
@@ -14,6 +13,9 @@ use Drupal\lightgallery\Field\FieldUseThumbs;
 use Drupal\lightgallery\Group\GroupsEnum;
 use Drupal\lightgallery\Manager\LightgalleryManager;
 use Drupal\lightgallery\Optionset\LightgalleryOptionset;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Light gallery formatter.
@@ -27,6 +29,68 @@ use Drupal\lightgallery\Optionset\LightgalleryOptionset;
  * )
  */
 class LightgalleryFormatter extends FileFormatterBase {
+
+  /**
+   * The Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a FormatterBase object.
+   *
+   * @param string $plugin_id
+   *   The plugin_id for the formatter.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The definition of the field to which the formatter is associated.
+   * @param array $settings
+   *   The formatter settings.
+   * @param string $label
+   *   The formatter label display setting.
+   * @param string $view_mode
+   *   The view mode.
+   * @param array $third_party_settings
+   *   Any third party settings.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity Type Manager.
+   */
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    $label,
+    $view_mode,
+    array $third_party_settings,
+    EntityTypeManagerInterface $entity_type_manager
+  ) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition
+  ) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['label'],
+      $configuration['view_mode'],
+      $configuration['third_party_settings'],
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -99,36 +163,36 @@ class LightgalleryFormatter extends FileFormatterBase {
 
     if (isset($image_styles[$this->settings[$lightgallery_image_style->getGroup()
       ->getName()][$lightgallery_image_style->getName()]])) {
-      $summary[] = t('Lightgallery image style: @style',
+      $summary[] = $this->t('Lightgallery image style: @style',
         [
           '@style' => $image_styles[$this->settings[$lightgallery_image_style->getGroup()
             ->getName()][$lightgallery_image_style->getName()]],
         ]);
     }
     else {
-      $summary[] = t('Lightgallery image style: Original image');
+      $summary[] = $this->t('Lightgallery image style: Original image');
     }
 
     if (isset($image_styles[$this->settings[$thumb_image_style->getGroup()
       ->getName()][$thumb_image_style->getName()]])) {
-      $summary[] = t('Thumbnail image style: @style',
+      $summary[] = $this->t('Thumbnail image style: @style',
         [
           '@style' => $image_styles[$this->settings[$thumb_image_style->getGroup()
             ->getName()][$thumb_image_style->getName()]],
         ]);
     }
     else {
-      $summary[] = t('Thumbnail image style: Original image');
+      $summary[] = $this->t('Thumbnail image style: Original image');
     }
 
     $summary[] = ($this->settings[$use_thumbnails->getGroup()
-      ->getName()][$use_thumbnails->getName()]) ? t('Use thumbs in gallery: Yes') : t('Use thumbs in gallery: No');
+      ->getName()][$use_thumbnails->getName()]) ? $this->t('Use thumbs in gallery: Yes') : $this->t('Use thumbs in gallery: No');
 
     $summary[] = !empty($this->settings[$title_source->getGroup()
-      ->getName()][$title_source->getName()]) ? t('Value used as title: @title', [
+      ->getName()][$title_source->getName()]) ? $this->t('Value used as title: @title', [
         '@title' => $this->settings[$title_source->getGroup()
           ->getName()][$title_source->getName()],
-      ]) : t('Value used as title: none');
+      ]) : $this->t('Value used as title: none');
     return $summary;
   }
 
@@ -166,8 +230,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         $item = $file->_referringItem;
         // Load image urls.
         if (!empty($lightgallery_image_style)) {
-          $item_detail['slide'] = $item_detail['thumb'] = ImageStyle::load($lightgallery_image_style)
-            ->buildUrl($uri);
+          $item_detail['slide'] = $item_detail['thumb'] = $this->entityTypeManager->getStorage('image_style')->load($lightgallery_image_style)->buildUrl($uri);
         }
         else {
           $item_detail['slide'] = $item_detail['thumb'] = file_create_url($uri);
@@ -177,8 +240,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         if ($thumb_image_style != $lightgallery_image_style) {
           if (!empty($thumb_image_style)) {
             // Load thumb url.
-            $item_detail['thumb'] = ImageStyle::load($thumb_image_style)
-              ->buildUrl($uri);
+            $item_detail['thumb'] = $this->entityTypeManager->getStorage('image_style')->load($thumb_image_style)->buildUrl($uri);
           }
           else {
             $item_detail['thumb'] = file_create_url($uri);
