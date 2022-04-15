@@ -110,7 +110,7 @@ class LightGallery extends StylePluginBase {
     }
 
     $fields_settings = LightgalleryManager::getSettingFields();
-    /*
+    /**
      * @var \Drupal\lightgallery\Field\FieldInterface $field
      * @var \Drupal\lightgallery\Group\GroupInterface $group
      */

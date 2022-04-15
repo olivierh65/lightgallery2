@@ -7,13 +7,60 @@ namespace Drupal\lightgallery\Field;
  */
 abstract class FieldBase implements FieldInterface {
 
+  /**
+   * The field name.
+   *
+   * @var string
+   */
   protected $name;
+
+  /**
+   * The field title.
+   *
+   * @var string
+   */
   protected $title;
+
+  /**
+   * The field type.
+   *
+   * @var string
+   */
   protected $type;
+
+  /**
+   * The field description.
+   *
+   * @var string
+   */
   protected $description;
+
+  /**
+   * States if the field is required or not.
+   *
+   * @var bool
+   */
   protected $isRequired;
+
+  /**
+   * The field group.
+   *
+   * @var mixed
+   */
   protected $group;
+
+  /**
+   * The field default value.
+   *
+   * @var mixed
+   */
   protected $defaultValue;
+
+  /**
+   * The options.
+   *
+   * @var mixed
+   */
   protected $options;
 
   /**

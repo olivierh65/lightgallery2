@@ -46,7 +46,7 @@ class LightgalleryFormatter extends FileFormatterBase {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $fields_settings = LightgalleryManager::getSettingFields();
-    /*
+    /**
      * @var \Drupal\lightgallery\Field\FieldInterface $field
      * @var \Drupal\lightgallery\Group\GroupInterface $group
      */
@@ -136,9 +136,7 @@ class LightgalleryFormatter extends FileFormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    /*
-     * @var \Drupal\image\Plugin\Field\FieldType\ImageItem $item
-     */
+    /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $item */
     $item_list = [];
 
     $files = $this->getEntitiesToView($items, $langcode);

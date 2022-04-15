@@ -43,6 +43,11 @@ use Drupal\lightgallery\Optionset\LightgalleryOptionSetInterface;
  */
 class LightgalleryManager {
 
+  /**
+   * The option set object.
+   *
+   * @var \Drupal\lightgallery\Optionset\LightgalleryOptionSetInterface
+   */
   protected $optionSet;
 
   /**

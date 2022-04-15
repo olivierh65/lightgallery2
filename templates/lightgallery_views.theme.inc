@@ -24,7 +24,7 @@ function template_preprocess_lightgallery_views_style(array &$variables) {
     return;
   }
 
-  /*
+  /**
    * @var \Drupal\lightgallery\Plugin\views\style\LightGallery $handler
    * @var \Drupal\views\Plugin\views\field\Field $field
    */

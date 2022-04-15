@@ -7,10 +7,39 @@ namespace Drupal\lightgallery\Optionset;
  */
 class LightgalleryOptionset implements LightgalleryOptionSetInterface {
 
+  /**
+   * The possible options.
+   *
+   * @var array
+   */
   protected $options;
+
+  /**
+   * Use thumbs option.
+   *
+   * @var bool
+   */
   protected $useThumbs = FALSE;
+
+  /**
+   * Autoplay option.
+   *
+   * @var bool
+   */
   protected $autoplay = FALSE;
+
+  /**
+   * Zoom option.
+   *
+   * @var bool
+   */
   protected $zoom = FALSE;
+
+  /**
+   * Hash option.
+   *
+   * @var bool
+   */
   protected $hash = FALSE;
 
   /**
