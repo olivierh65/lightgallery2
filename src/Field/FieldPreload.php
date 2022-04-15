@@ -20,7 +20,10 @@ class FieldPreload extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getPreloadOptions'];
+    return [
+      'Drupal\lightgallery\Manager\LightgalleryManager',
+      'getPreloadOptions',
+    ];
   }
 
   /**

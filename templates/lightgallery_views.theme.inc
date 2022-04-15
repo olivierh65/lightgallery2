@@ -47,7 +47,7 @@ function template_preprocess_lightgallery_views_style(array &$variables) {
   $title_field = $options['title'];
 
   $items = [];
-  foreach ($rendered_rows as $id => $row) {
+  foreach ($rendered_rows as $row) {
     /** @var \Drupal\views\ResultRow $row */
     $rendered_slide = FALSE;
     $rendered_thumb = FALSE;

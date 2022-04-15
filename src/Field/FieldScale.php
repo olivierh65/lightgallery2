@@ -20,7 +20,10 @@ class FieldScale extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getScaleOptions'];
+    return [
+      'Drupal\lightgallery\Manager\LightgalleryManager',
+      'getScaleOptions',
+    ];
   }
 
   /**

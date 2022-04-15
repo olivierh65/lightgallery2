@@ -20,7 +20,10 @@ class FieldMode extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getLightgalleryModes'];
+    return [
+      'Drupal\lightgallery\Manager\LightgalleryManager',
+      'getLightgalleryModes',
+    ];
   }
 
   /**

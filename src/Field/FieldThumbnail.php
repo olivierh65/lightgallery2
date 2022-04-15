@@ -34,7 +34,10 @@ class FieldThumbnail extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Plugin\views\style\LightGallery', 'getImageFields'];
+    return [
+      'Drupal\lightgallery\Plugin\views\style\LightGallery',
+      'getImageFields',
+    ];
   }
 
   /**

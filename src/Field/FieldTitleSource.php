@@ -27,7 +27,10 @@ class FieldTitleSource extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getImageSourceFields'];
+    return [
+      'Drupal\lightgallery\Manager\LightgalleryManager',
+      'getImageSourceFields',
+    ];
   }
 
   /**

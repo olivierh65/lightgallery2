@@ -20,7 +20,10 @@ class FieldCurrentPagerPosition extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Manager\LightgalleryManager', 'getCurrentPagerPositionOptions'];
+    return [
+      'Drupal\lightgallery\Manager\LightgalleryManager',
+      'getCurrentPagerPositionOptions',
+    ];
   }
 
   /**

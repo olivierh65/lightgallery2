@@ -27,7 +27,10 @@ class FieldTitle extends FieldBase {
    * {@inheritdoc}
    */
   protected function setOptions() {
-    return ['Drupal\lightgallery\Plugin\views\style\LightGallery', 'getNonImageFields'];
+    return [
+      'Drupal\lightgallery\Plugin\views\style\LightGallery',
+      'getNonImageFields',
+    ];
   }
 
   /**

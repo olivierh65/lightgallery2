@@ -103,7 +103,6 @@ class LightGallery extends StylePluginBase {
     // Get the active field options.
     $this->fieldSources = $this->confGetFieldSources();
     $field_images = $this->getImageFields();
-    $field_others = $this->getNonImageFields();
     $missing_field_warning = '';
     if (empty($field_images)) {
       $missing_field_warning = $this->t('<strong>You must add a field of type image to your view display before this value can be set.</strong><br/>');
@@ -282,13 +281,6 @@ class LightGallery extends StylePluginBase {
    */
   private function getImageFields() {
     return !empty($this->fieldSources['field_options_images']) ? $this->fieldSources['field_options_images'] : [];
-  }
-
-  /**
-   * Returns available fields on view apart from images.
-   */
-  private function getNonImageFields() {
-    return !empty($this->fieldSources['field_options']) ? $this->fieldSources['field_options'] : [];
   }
 
 }
