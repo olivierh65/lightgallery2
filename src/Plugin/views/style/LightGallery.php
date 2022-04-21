@@ -129,7 +129,7 @@ class LightGallery extends StylePluginBase {
         $form[$group->getName()][$field->getName()] = [
           '#type' => $field->getType(),
           '#title' => $field->getTitle(),
-          '#default_value' => isset($this->options['lightgallery'][$field->getName()]) ? $this->options['lightgallery'][$field->getName()] : $field->getDefaultValue(),
+          '#default_value' => $this->options['lightgallery'][$field->getName()] ?? $field->getDefaultValue(),
           '#description' => $field->getDescription(),
           '#required' => $field->isRequired(),
         ];

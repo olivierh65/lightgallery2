@@ -130,7 +130,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         $element[$group->getName()][$field->getName()] = [
           '#type' => $field->getType(),
           '#title' => $field->getTitle(),
-          '#default_value' => isset($this->settings[$group->getName()][$field->getName()]) ? $this->settings[$group->getName()][$field->getName()] : $field->getDefaultValue(),
+          '#default_value' => $this->settings[$group->getName()][$field->getName()] ?? $field->getDefaultValue(),
           '#description' => $field->getDescription(),
           '#required' => $field->isRequired(),
         ];
