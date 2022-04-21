@@ -5,6 +5,7 @@ namespace Drupal\lightgallery\Plugin\views\style;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
+use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\lightgallery\Manager\LightgalleryManager;
 use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\image\Entity\ImageStyle;
@@ -247,17 +248,30 @@ class LightGallery extends StylePluginBase {
           if (in_array($id, $image_fields)) {
             // This is an image/thumb field.
             // Create URI for selected image style.
-            $image_style = $this->view->field[$id]->options['settings']['image_style'];
+            $field_settings = $this->view->field[$id]->options['settings'];
+            $image_style = NULL;
+            if (array_key_exists('lightgallery_core', $field_settings)) {
+              $image_style = $field_settings['lightgallery_core']['lightgallery_image_style'];
+            }
+            if (array_key_exists('image_style', $field_settings)) {
+              $image_style = $field_settings['image_style'];
+            }
 
             $field_name = $fields[$id]->field;
-            $file = $result[$count]->_entity->{$field_name}->entity;
-            if ($file instanceof FileInterface && $uri = $file->getFileUri()) {
-              if (!empty($image_style)) {
-                $rendered_fields[$count][$id] = ImageStyle::load($image_style)
-                  ->buildUrl($uri);
-              }
-              else {
-                $rendered_fields[$count][$id] = file_create_url($uri);
+
+            $field = $result[$count]->_entity->{$field_name};
+            if ($field instanceof FileFieldItemList) {
+              foreach ($field as $entity_field) {
+                $file = $entity_field->entity;
+                if ($file instanceof FileInterface && $uri = $file->getFileUri()) {
+                  if (!empty($image_style)) {
+                    $rendered_fields[$count][$id][] = ImageStyle::load($image_style)
+                      ->buildUrl($uri);
+                  }
+                  else {
+                    $rendered_fields[$count][$id][] = file_create_url($uri);
+                  }
+                }
               }
             }
           }

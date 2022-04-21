@@ -54,33 +54,34 @@ function template_preprocess_lightgallery_views_style(array &$variables) {
     $rendered_title = FALSE;
 
     foreach ($row as $field_name => $field) {
-      // Check if field is thumb field.
-      if ($field_name == $thumb_field) {
-        $rendered_thumb = $field;
-      }
+      foreach ($field as $image) {
+        // Check if field is thumb field.
+        if ($field_name == $thumb_field) {
+          $rendered_thumb = $image;
+        }
 
-      // Check if field is image field.
-      if ($field_name == $image_field) {
-        $rendered_slide = $field;
-      }
+        // Check if field is image field.
+        if ($field_name == $image_field) {
+          $rendered_slide = $image;
+        }
 
-      // Check if field is title field.
-      if ($field_name == $title_field) {
-        $rendered_title = $field;
-      }
+        // Check if field is title field.
+        if ($field_name == $title_field) {
+          $rendered_title = $image;
+        }
 
-      // Store field labels.
-      $item['field_label'] = $fields[$field_name]->label();
+        // Store field labels.
+        $item['field_label'] = $fields[$field_name]->label();
+
+        $item['slide'] = $rendered_slide;
+        $item['thumb'] = $rendered_thumb;
+        $item['title'] = ($rendered_title) ? $rendered_title->__toString() : FALSE;
+
+        // Set row style to display: hidden or block.
+        $item['row_style'] = 'display: block;';
+        $items[] = $item;
+      }
     }
-
-    $item['slide'] = $rendered_slide;
-    $item['thumb'] = $rendered_thumb;
-    $item['title'] = ($rendered_title) ? $rendered_title->__toString() : FALSE;
-
-    // Set row style to display: hidden or block.
-    $item['row_style'] = 'display: block;';
-
-    $items[] = $item;
   }
 
   // Set unique id, so that multiple instances on one page can be created.
