@@ -54,6 +54,9 @@ function template_preprocess_lightgallery_views_style(array &$variables) {
     $rendered_title = FALSE;
 
     foreach ($row as $field_name => $field) {
+      if (!is_array($field)) {
+        continue;
+      }
       foreach ($field as $image) {
         // Check if field is thumb field.
         if ($field_name == $thumb_field) {
