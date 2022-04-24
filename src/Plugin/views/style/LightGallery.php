@@ -3,6 +3,7 @@
 namespace Drupal\lightgallery\Plugin\views\style;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -66,11 +67,30 @@ class LightGallery extends StylePluginBase {
   protected $fieldSources;
 
   /**
-   * {@inheritdoc}
+   * Generated url for files.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityFieldManagerInterface $entity_field_manager) {
+  protected $fileUrlGenerator;
+
+  /**
+   * Constructs lightgallery view style plugin.
+   *
+   * @param array $configuration
+   *   The configuration array.
+   * @param string $plugin_id
+   *   The plugin id for the view style.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The Entity Type Manager.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file url generator.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityFieldManagerInterface $entity_field_manager, FileUrlGeneratorInterface $file_url_generator) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityFieldManager = $entity_field_manager;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -84,7 +104,8 @@ class LightGallery extends StylePluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_field.manager')
+      $container->get('entity_field.manager'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -269,7 +290,7 @@ class LightGallery extends StylePluginBase {
                       ->buildUrl($uri);
                   }
                   else {
-                    $rendered_fields[$count][$id][] = file_create_url($uri);
+                    $rendered_fields[$count][$id][] = $this->fileUrlGenerator->generateAbsoluteString($uri);
                   }
                 }
               }
