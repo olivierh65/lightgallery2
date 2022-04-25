@@ -31,5 +31,9 @@
     "support": {
         "issues": "https://drupal.org/project/issues/lightgallery",
         "source": "https://git.drupalcode.org/project/lightgallery"
+    },
+    "require": {
+        "php": ">=7.0",
+        "drupal/core": "^9"
     }
 }
