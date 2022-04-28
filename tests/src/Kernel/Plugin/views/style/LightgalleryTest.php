@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\lightgallery\Kernel;
+namespace Drupal\Tests\lightgallery\Kernel\Plugin\views\style;
 
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
@@ -11,13 +11,13 @@ use Drupal\views\Tests\ViewTestData;
 use Drupal\views\Views;
 
 /**
- * Tests the views tree list style plugin.
+ * Test the view lightgallery style plugin.
  *
  * @group lightgallery
  *
  * @coversDefaultClass \Drupal\lightgallery\Plugin\views\style\LightGallery
  */
-class StyleLightGalleryTest extends ViewsKernelTestBase {
+class LightgalleryTest extends ViewsKernelTestBase {
 
   /**
    * {@inheritdoc}
