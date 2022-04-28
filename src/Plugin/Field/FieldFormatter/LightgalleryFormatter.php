@@ -3,10 +3,11 @@
 namespace Drupal\lightgallery\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\Plugin\Field\FieldFormatter\FileFormatterBase;
+use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
 use Drupal\lightgallery\Field\FieldLightgalleryImageStyle;
 use Drupal\lightgallery\Field\FieldThumbImageStyle;
 use Drupal\lightgallery\Field\FieldTitleSource;
@@ -14,7 +15,6 @@ use Drupal\lightgallery\Field\FieldUseThumbs;
 use Drupal\lightgallery\Group\GroupsEnum;
 use Drupal\lightgallery\Manager\LightgalleryManager;
 use Drupal\lightgallery\Optionset\LightgalleryOptionset;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -29,24 +29,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   }
  * )
  */
-class LightgalleryFormatter extends FileFormatterBase {
+class LightgalleryFormatter extends ImageFormatterBase {
 
   /**
-   * The Entity Type Manager.
+   * The image style entity storage.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\image\ImageStyleStorageInterface
    */
-  protected $entityTypeManager;
+  protected $imageStyleStorage;
 
   /**
-   * Generated url for files.
+   * The file URL generator.
    *
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
   protected $fileUrlGenerator;
 
   /**
-   * Constructs a FormatterBase object.
+   * Constructs an ImageFormatter object.
    *
    * @param string $plugin_id
    *   The plugin_id for the formatter.
@@ -62,36 +62,21 @@ class LightgalleryFormatter extends FileFormatterBase {
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The Entity Type Manager.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $image_style_storage
+   *   The image style storage.
    * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
-   *   The file url generator.
+   *   The file URL generator.
    */
-  public function __construct(
-    $plugin_id,
-    $plugin_definition,
-    FieldDefinitionInterface $field_definition,
-    array $settings,
-    $label,
-    $view_mode,
-    array $third_party_settings,
-    EntityTypeManagerInterface $entity_type_manager,
-    FileUrlGeneratorInterface $file_url_generator
-  ) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, EntityStorageInterface $image_style_storage, FileUrlGeneratorInterface $file_url_generator) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->entityTypeManager = $entity_type_manager;
+    $this->imageStyleStorage = $image_style_storage;
     $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(
-    ContainerInterface $container,
-    array $configuration,
-    $plugin_id,
-    $plugin_definition
-  ) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $plugin_id,
       $plugin_definition,
@@ -100,7 +85,7 @@ class LightgalleryFormatter extends FileFormatterBase {
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('entity_type.manager'),
+      $container->get('entity_type.manager')->getStorage('image_style'),
       $container->get('file_url_generator')
     );
   }
@@ -110,10 +95,18 @@ class LightgalleryFormatter extends FileFormatterBase {
    */
   public static function defaultSettings() {
     $default_settings = [];
-    $lightgallery_groups = GroupsEnum::toArray();
 
-    foreach ($lightgallery_groups as $lightgallery_group) {
-      $default_settings[$lightgallery_group] = [];
+    // Invert the groups to be the key of the array.
+    $lightgallery_groups = array_flip(GroupsEnum::toArray());
+    $fields_settings = LightgalleryManager::getSettingFields();
+
+    // Set the default value for each group and field.
+    foreach ($fields_settings as $field) {
+      // If the field has a group in the groups array, set the default value
+      // for the field.
+      if (isset($lightgallery_groups[$field->getGroup()->getName()])) {
+        $default_settings[$field->getGroup()->getName()][$field->getName()] = $field->getDefaultValue();
+      }
     }
     return $default_settings + parent::defaultSettings();
   }
@@ -123,6 +116,7 @@ class LightgalleryFormatter extends FileFormatterBase {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $fields_settings = LightgalleryManager::getSettingFields();
+    $element = parent::settingsForm($form, $form_state);
     /**
      * @var \Drupal\lightgallery\Field\FieldInterface $field
      * @var \Drupal\lightgallery\Group\GroupInterface $group
@@ -143,7 +137,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         $element[$group->getName()][$field->getName()] = [
           '#type' => $field->getType(),
           '#title' => $field->getTitle(),
-          '#default_value' => $this->settings[$group->getName()][$field->getName()] ?? $field->getDefaultValue(),
+          '#default_value' => $this->getSetting($group->getName())[$field->getName()] ?? $field->getDefaultValue(),
           '#description' => $field->getDescription(),
           '#required' => $field->isRequired(),
         ];
@@ -243,7 +237,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         $item = $file->_referringItem;
         // Load image urls.
         if (!empty($lightgallery_image_style)) {
-          $item_detail['slide'] = $item_detail['thumb'] = $this->entityTypeManager->getStorage('image_style')->load($lightgallery_image_style)->buildUrl($uri);
+          $item_detail['slide'] = $item_detail['thumb'] = $this->imageStyleStorage->load($lightgallery_image_style)->buildUrl($uri);
         }
         else {
           $item_detail['slide'] = $item_detail['thumb'] = $this->fileUrlGenerator->generateAbsoluteString($uri);
@@ -253,7 +247,7 @@ class LightgalleryFormatter extends FileFormatterBase {
         if ($thumb_image_style != $lightgallery_image_style) {
           if (!empty($thumb_image_style)) {
             // Load thumb url.
-            $item_detail['thumb'] = $this->entityTypeManager->getStorage('image_style')->load($thumb_image_style)->buildUrl($uri);
+            $item_detail['thumb'] = $this->imageStyleStorage->load($thumb_image_style)->buildUrl($uri);
           }
           else {
             $item_detail['thumb'] = $this->fileUrlGenerator->generateAbsoluteString($uri);

@@ -1,0 +1,7 @@
+name: 'Lightgallery Demo'
+description: 'Provides a demonstration module for lightgallery on simpletest.'
+package: Light Gallery
+type: module
+core_version_requirement: ^9
+dependencies:
+  - 'lightgallery:lightgallery'
