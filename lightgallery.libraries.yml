@@ -1,9 +1,9 @@
 lightgallery:
   title: 'lightGallery'
-  remote: 'https://github.com/sachinchoolur/lightGallery/tree/1.6.11'
+  remote: 'https://github.com/sachinchoolur/lightGallery/tree/1.10.0'
   license:
     name: 'Apache License'
-    url: 'https://github.com/sachinchoolur/lightGallery/blob/1.6.11/LICENSE.md'
+    url: 'https://github.com/sachinchoolur/lightGallery/blob/1.10.0/LICENSE.md'
     gpl-compatible: false
   js:
     /libraries/lightgallery/dist/js/lightgallery.min.js: { minified: true }
