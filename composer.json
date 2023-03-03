@@ -34,6 +34,7 @@
     },
     "require": {
         "php": ">=7.0",
-        "drupal/core": "^9"
+        "drupal/core": "^9",
+        "sachinchoolur/lightgallery": "^1.2.21"
     }
 }
