@@ -31,16 +31,8 @@ the plugin to work.
 ### Using composer to install the lightgallery plugin
 
 1. Open the `composer.json` file of your site.
-2. Add `"sachinchoolur/lightgallery": "1.10.0"` to the `require` section.
-```
-"require": {
-    .
-    .
-    "sachinchoolur/lightgallery": "1.10.0"
- }
-```
 
-3. Add `"libraries/{$name}": ["type:drupal-library"]` to the `"installer-paths"`
+2. Add `"libraries/{$name}": ["type:drupal-library"]` to the `"installer-paths"`
    section of your composer.
 ```
 "installer-paths": {
@@ -50,7 +42,7 @@ the plugin to work.
 }
 ```
 
-4. Add `sachinchoolur/lightgallery` as a new `package` to `"repositories"`.
+3. Add `sachinchoolur/lightgallery` as a new `package` to `"repositories"`.
 ```
 "repositories": [
     .
@@ -59,24 +51,24 @@ the plugin to work.
         "type": "package",
         "package": {
             "name": "sachinchoolur/lightgallery",
-            "version": "1.10.0",
+            "version": "1.2.21",
             "type": "drupal-library",
             "source": {
-                "url": "https://github.com/sachinchoolur/lightGallery",
-                "type": "git",
-                "reference": "1.10.0"
+                "url": "https://github.com/sachinchoolur/lightGallery/archive/refs/tags/1.2.21.zip",
+                "type": "zip",
+                "reference": "1.2.21"
             }
         }
     }
 ]
 ```
-5. Run `composer update sachinchoolur/lightgallery`.
+4. Run `composer require drupal/lightgallery`.
 
 
 ### Manually installing the lightgallery plugin
 
 Download the [lightGallery plugin](http://sachinchoolur.github.io/lightGallery/)
-(version 1.10) and place the
+(version 1.2.21) and place the
 resulting directory into the libraries directory. Ensure
 `libraries/lightgallery/` exists.
 
