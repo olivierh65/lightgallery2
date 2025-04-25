@@ -99,7 +99,7 @@ trait LightgalleryThumbnailFormatterTrait {
     $form['advanced']['custom_settings'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Custom settings'),
-      '#description' => $this->t('A JSON object with <a href=":url", target="_blank">lightGallery settings</a>. Plugins can be specified as strings and must be loaded by your theme or module if needed, e.g. <code>@plugins</code>.<br />Note that the module overrides some lightGallery defaults. If you define those settings here as well, the value specified here will be used.', [
+      '#description' => $this->t('A JSON object with <a href=":url", target="_blank">lightGallery settings</a>. Plugins can be specified as strings, e.g. <code>@plugins</code>.<br />Note that the module overrides some lightGallery defaults. If you define those settings here as well, the value specified here will be used.', [
         ':url' => 'https://www.lightgalleryjs.com/docs/settings',
         '@plugins' => "{ 'plugins': ['lgThumbnail'] }",
       ]),

@@ -45,14 +45,6 @@ and configure your lightGallery license key at `/admin/config/user-interface/lig
 
 ## Usage
 
-### General
-
-Some general remarks:
-
-* In order for the library to work a license key must be configured at `/admin/config/user-interface/lightgallery`.
-* Only the thumbnail and video plugin are loaded automatically, if other plugins are used you are responsible for loading them.
-
-
 ### Field formatters
 
 The module provides a lightGallery thumbnail formatter for both image and media fields (with a cardinality different from 1).
@@ -89,5 +81,5 @@ $build = [
   ],
   // Set to FALSE to disable automatic initialisation
   '#init' => FALSE
-]; 
+];
 ```

@@ -14,9 +14,121 @@ init:
 lightgallery:
   js:
     /libraries/lightgallery/dist/lightgallery.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lightgallery.css: { }
+      css/lightgallery.css: { }
+
+lightgallery-autoplay:
+  js:
+    /libraries/lightgallery/dist/plugins/autoplay/lg-autoplay.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-autoplay.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-comment:
+  js:
+    /libraries/lightgallery/dist/plugins/comment/lg-comment.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-comment.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-fullscreen:
+  js:
+    /libraries/lightgallery/dist/plugins/fullscreen/lg-fullscreen.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-fullscreen.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-hash:
+  js:
+    /libraries/lightgallery/dist/plugins/hash/lg-hash.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-hash.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-medium-zoom:
+  js:
+    /libraries/lightgallery/dist/plugins/mediumZoom/lg-medium-zoom.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-medium-zoom.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-pager:
+  js:
+    /libraries/lightgallery/dist/plugins/pager/lg-pager.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-pager.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-relative-caption:
+  js:
+    /libraries/lightgallery/dist/plugins/relativeCaption/lg-relative-caption.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-relative-caption.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-rotate:
+  js:
+    /libraries/lightgallery/dist/plugins/rotate/lg-rotate.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-rotate.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-share:
+  js:
+    /libraries/lightgallery/dist/plugins/share/lg-share.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-share.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-thumbnail:
+  js:
     /libraries/lightgallery/dist/plugins/thumbnail/lg-thumbnail.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-thumbnail.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-video:
+  js:
     /libraries/lightgallery/dist/plugins/video/lg-video.min.js: { minified: true }
   css:
     component:
-      /libraries/lightgallery/dist/css/lightgallery-bundle.css: { }
-      css/lightgallery.css: { }
+      /libraries/lightgallery/dist/css/lg-video.css: { }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-vimeo-thumbnail:
+  js:
+    /libraries/lightgallery/dist/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js: { minified: true }
+  dependencies:
+    - lightgallery/lightgallery
+
+lightgallery-zoom:
+  js:
+    /libraries/lightgallery/dist/plugins/zoom/lg-zoom.min.js: { minified: true }
+  css:
+    component:
+      /libraries/lightgallery/dist/css/lg-zoom.css: { }
+  dependencies:
+    - lightgallery/lightgallery

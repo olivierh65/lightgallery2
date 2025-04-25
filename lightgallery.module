@@ -31,13 +31,40 @@ function template_preprocess_lightgallery(array &$variables): void {
   // Set the license key.
   $variables['settings']['licenseKey'] = Drupal::config('lightgallery.settings')->get('license_key');
 
-  // Set the ID attribute and attach the settings.
+  // Set the ID and attach the settings.
   $id = $variables['settings']['galleryId'] ?? Html::getUniqueId('lightgallery');
   $variables['attributes']['id'] = $id;
   $variables['#attached']['drupalSettings']['lightgallery'][$id] = [
     'inline' => $variables['inline'],
     'settings' => $variables['settings'],
   ];
+
+  // Attach the libraries.
+  $variables['#attached']['library'][] = 'lightgallery/lightgallery';
+
+  if (!empty($variables['settings']['plugins'])) {
+    $plugin_libraries = [
+      'lgAutoplay' => 'autoplay',
+      'lgComment' => 'comment',
+      'lgFullscreen' => 'fullscreen',
+      'lgHash' => 'hash',
+      'lgMediumZoom' => 'medium-zoom',
+      'lgPager' => 'pager',
+      'lgRelativeCaption' => 'relative-caption',
+      'lgRotate' => 'rotate',
+      'lgShare' => 'share',
+      'lgThumbnail' => 'thumbnail',
+      'lgVideo' => 'video',
+      'lgVimeoThumbnail' => 'vimeo-thumbnail',
+      'lgZoom' => 'zoom',
+    ];
+
+    foreach ($variables['settings']['plugins'] as $plugin) {
+      if (isset($plugin_libraries[$plugin])) {
+        $variables['#attached']['library'][] = 'lightgallery/lightgallery-' . $plugin_libraries[$plugin];
+      }
+    }
+  }
 
   // Add the inline class.
   if ($variables['inline']) {
