@@ -1,0 +1,5 @@
+lightgallery.admin.settings:
+  title: lightGallery settings
+  description: Manage the lightGallery settings.
+  route_name: lightgallery.admin.settings
+  parent: system.admin_config_ui

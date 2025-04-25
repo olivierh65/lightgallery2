@@ -1,0 +1,7 @@
+lightgallery.admin.settings:
+  path: /admin/config/user-interface/lightgallery
+  defaults:
+    _form: Drupal\lightgallery\Form\SettingsForm
+    _title: lightGallery settings
+  requirements:
+    _permission: configure lightgallery

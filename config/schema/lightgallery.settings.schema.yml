@@ -1,0 +1,12 @@
+lightgallery.settings:
+  type: config_object
+  label: Settings
+  mapping:
+    license_key:
+      type: string
+      label: Licence key
+      constraints:
+        NotBlank: { }
+        Regex:
+          pattern: '/^[A-Z0-9]+(-[A-Z0-9]+)+$/'
+          message: The license key is not valid.

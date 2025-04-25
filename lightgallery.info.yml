@@ -1,8 +1,9 @@
-name: Light Gallery
-description: Integrate the Light Gallery library with Drupal.
-package: Light Gallery
+name: lightGallery
+description: Integrates image and media fields with lightGallery.
+package: Media
+
 type: module
 core_version_requirement: ^10 || ^11
 
 dependencies:
-  - drupal:views
+  - drupal:image

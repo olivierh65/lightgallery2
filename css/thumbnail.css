@@ -1,0 +1,5 @@
+.lightgallery--thumbnail .lightgallery__items {
+  display: flex;
+  gap: 1rem 1rem;
+  flex-wrap: wrap;
+}

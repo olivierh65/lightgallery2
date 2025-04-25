@@ -1,0 +1,22 @@
+.lightgallery__items,
+.lightgallery__item {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lightgallery__item {
+  cursor: pointer;
+}
+
+.lightgallery__inline-container {
+  display: none;
+}
+
+.js .lightgallery--inline .lightgallery__items {
+  display: none;
+}
+
+.js .lightgallery--inline .lightgallery__inline-container {
+  display: block;
+}

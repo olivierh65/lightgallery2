@@ -1,6 +1,0 @@
-name: 'Lightgallery Views Test'
-type: module
-description: 'Provides views for lightgallery tests.'
-package: Testing
-dependencies:
-  - drupal:views

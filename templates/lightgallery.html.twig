@@ -1,18 +1,44 @@
-<div class="lightgallery-wrapper">
-    <ul class="lightgallery" id="lightgallery-{{ id }}">
+{#
+/**
+ * @file
+ * Default theme implementation for a lightGallery.
+ *
+ * Available variables:
+ * - id: the element and settings ID.
+ * - items: an array of items, each item is also an array with following elements:
+ *   - attributes: the item wrapper attributes.
+ *   - content: the item content.
+ *   - item: the field item (optional).
+ * - inline: indicates if the gallery should be inline.
+ * - settings: an associative array of lightGallery settings.
+ * - auto_init: indicates if the gallery will be initalized automatically.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ */
+#}
+{%
+  set classes = [
+    'lightgallery',
+  ]
+%}
+{%
+  set item_classes = [
+    'lightgallery__item',
+  ]
+%}
+
+{% if items or settings.dynamic %}
+  <div{{ attributes.addClass(classes) }}>
+    {% if items %}
+      <ul class="lightgallery__items">
         {% for item in items %}
-        <li data-src="{{ item.slide }}" style="{{ item.row_style }}" data-sub-html="{{ item.title }}">
-            {% if item.field_label is not empty %}
-            <div class="field-label">
-                <label>{{ item.field_label }}</label>
-            </div>
-            {% endif %}
-            <div class="field-content">
-                <a href="">
-                    <img class="img-responsive" src="{{ item.thumb }}" />
-                </a>
-            </div>
-        </li>
+          <li{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</li>
         {% endfor %}
-    </ul>
-</div>
+      </ul>
+    {% endif %}
+
+    {% if items and inline %}
+      <div class="lightgallery__inline-container"></div>
+    {% endif %}
+  </div>
+{% endif %}

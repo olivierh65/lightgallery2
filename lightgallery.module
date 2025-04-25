@@ -2,34 +2,70 @@
 
 /**
  * @file
- * Light Gallery module file.
+ * Main module file.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
-
-/**
- * Holds hooks and general functionality.
- */
-
-/**
- * Implements hook_help().
- */
-function lightgallery_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    case 'help.page.lightgallery':
-      $output = file_get_contents(\Drupal::service('extension.list.module')->getPath('lightgallery') . '/README.md');
-      return '<pre>' . $output . '</pre>';
-  }
-}
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Implements hook_theme().
  */
-function lightgallery_theme() {
+function lightgallery_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     'lightgallery' => [
-      'variables' => ['items' => [], 'id' => NULL],
-      'template' => 'lightgallery',
+      'variables' => ['items' => [], 'inline' => FALSE, 'settings' => [], 'init' => TRUE],
     ],
   ];
+}
+
+/**
+ * Default preprocess function for the lightgallery theme hook.
+ */
+function template_preprocess_lightgallery(array &$variables): void {
+  // Convert the item attributes.
+  foreach ($variables['items'] as &$item) {
+    $item['attributes'] = new Attribute($item['attributes'] ?? []);
+  }
+
+  // Set the license key.
+  $variables['settings']['licenseKey'] = Drupal::config('lightgallery.settings')->get('license_key');
+
+  // Set the ID attribute and attach the settings.
+  $id = $variables['settings']['galleryId'] ?? Html::getUniqueId('lightgallery');
+  $variables['attributes']['id'] = $id;
+  $variables['#attached']['drupalSettings']['lightgallery'][$id] = [
+    'inline' => $variables['inline'],
+    'settings' => $variables['settings'],
+  ];
+
+  // Add the inline class.
+  if ($variables['inline']) {
+    $variables['attributes']['class'][] = 'lightgallery--inline';
+  }
+
+  // Add the thumbnail class and library.
+  $hook = $variables['theme_hook_original'];
+  if (str_starts_with($hook, 'lightgallery__media_thumbnail__') || str_starts_with($hook, 'lightgallery__image_thumbnail__')) {
+    $variables['attributes']['class'][] = 'lightgallery--thumbnail';
+    $variables['#attached']['library'][] = 'lightgallery/thumbnail';
+  }
+
+  // Enable initialisation.
+  if ($variables['init']) {
+    $variables['attributes']['class'][] = 'lightgallery-init';
+    $variables['#attached']['library'][] = 'lightgallery/init';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function lightgallery_preprocess_image(array &$variabes): void {
+  // Append "#video" to video thumbnails to allow custom styling.
+  if (!empty($variabes['attributes']['data-is-video-thumbnail'])) {
+    $variabes['attributes']['src'] .= '#video';
+  }
+
+  unset($variabes['attributes']['data-is-video-thumbnail']);
 }
