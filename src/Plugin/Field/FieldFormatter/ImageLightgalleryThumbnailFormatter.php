@@ -162,7 +162,7 @@ class ImageLightgalleryThumbnailFormatter extends ImageFormatterBase {
    */
   public static function isApplicable(FieldDefinitionInterface $field_definition): bool {
     return parent::isApplicable($field_definition) &&
-      $field_definition->getFieldStorageDefinition()->getCardinality() === FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED;
+      $field_definition->getFieldStorageDefinition()->getCardinality() !== 1;
   }
 
 }
