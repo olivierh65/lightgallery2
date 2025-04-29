@@ -30,6 +30,7 @@ function template_preprocess_lightgallery(array &$variables): void {
 
   // Set the license key.
   $variables['settings']['licenseKey'] = Drupal::config('lightgallery.settings')->get('license_key');
+  $variables['#cache']['tags'][] = 'config:lightgallery.settings';
 
   // Set the ID and attach the settings.
   $id = $variables['settings']['galleryId'] ?? Html::getUniqueId('lightgallery');
