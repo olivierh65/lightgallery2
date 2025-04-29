@@ -189,7 +189,7 @@ trait LightgalleryThumbnailFormatterTrait {
   protected function getLightgallerySettings(): array {
     $settings = $this->getSetting('custom_settings');
     $settings += [
-      'thumbnail' => TRUE,
+      'thumbnail' => $this->fieldDefinition->getFieldStorageDefinition()->getCardinality() !== 1,
     ];
 
     if ($settings['thumbnail'] && empty($settings['plugins']) || !in_array('lgThumbnail', $settings['plugins'], TRUE)) {

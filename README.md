@@ -47,8 +47,7 @@ and configure your lightGallery license key at `/admin/config/user-interface/lig
 
 ### Field formatters
 
-The module provides a lightGallery thumbnail formatter for both image and media fields (with a cardinality different from 1).
-
+The module provides a lightGallery thumbnail formatter for both image and media fields.
 Just enable and configure the lightGallery formatter on the desired field and you're done.
 
 

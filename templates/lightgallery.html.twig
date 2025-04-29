@@ -30,11 +30,11 @@
 {% if items or settings.dynamic %}
   <div{{ attributes.addClass(classes) }}>
     {% if items %}
-      <ul class="lightgallery__items">
+      <div class="lightgallery__items">
         {% for item in items %}
-          <li{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</li>
+          <div{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</div>
         {% endfor %}
-      </ul>
+      </div>
     {% endif %}
 
     {% if items and inline %}

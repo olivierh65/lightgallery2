@@ -378,9 +378,7 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
    * {@inheritdoc}
    */
   public static function isApplicable(FieldDefinitionInterface $field_definition): bool {
-    return parent::isApplicable($field_definition) &&
-      $field_definition->getSetting('target_type') === 'media' &&
-      $field_definition->getFieldStorageDefinition()->getCardinality() !== 1;
+    return parent::isApplicable($field_definition) && $field_definition->getSetting('target_type') === 'media';
   }
 
 }

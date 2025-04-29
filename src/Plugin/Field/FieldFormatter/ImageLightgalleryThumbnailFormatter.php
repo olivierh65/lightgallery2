@@ -156,12 +156,4 @@ class ImageLightgalleryThumbnailFormatter extends ImageFormatterBase {
     );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function isApplicable(FieldDefinitionInterface $field_definition): bool {
-    return parent::isApplicable($field_definition) &&
-      $field_definition->getFieldStorageDefinition()->getCardinality() !== 1;
-  }
-
 }
