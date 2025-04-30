@@ -20,17 +20,17 @@ lightgallery_thumbnail_formatter_settings:
       type: sequence
       label: Custom settings
 
-field.formatter.settings.image_lightgallery:
+field.formatter.settings.image_lightgallery_thumbnail:
   type: lightgallery_thumbnail_formatter_settings
-  label: Image lightGallery formatter settings
+  label: Image lightGallery thumbnail formatter settings
   mapping:
     title_as_caption:
       type: boolean
       label: Title as caption
 
-field.formatter.settings.media_lightgallery:
+field.formatter.settings.media_lightgallery_thumbnail:
   type: lightgallery_thumbnail_formatter_settings
-  label: Media lightGallery formatter settings
+  label: Media lightGallery thumbnail formatter settings
   mapping:
     caption_view_mode:
       type: string
