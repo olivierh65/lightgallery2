@@ -3,7 +3,7 @@
  * Initializes lightGallery.
  */
 
-let init = {};
+let lightgalleryInstances = {};
 
 (function (Drupal, once, lightGallery) {
 
@@ -57,7 +57,7 @@ let init = {};
         }
 
         // Store the instance in a global variable so other JavaScript can use it.
-        init[id] = instance;
+        lightgalleryInstances[id] = instance;
       });
     }
   };
