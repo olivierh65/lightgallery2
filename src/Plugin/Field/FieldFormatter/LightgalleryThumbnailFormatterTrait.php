@@ -30,6 +30,13 @@ trait LightgalleryThumbnailFormatterTrait {
   public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form = parent::settingsForm($form, $form_state);
 
+    $config = \Drupal::config('lightgallery.settings');
+    $enabled_plugins = $config->get('plugins') ?? [];
+    $enabled_plugins = array_filter($enabled_plugins, function ($plugin) {
+      return !empty($plugin);
+    });
+
+    
     $parents = ['fields', $this->fieldDefinition->getName(), 'settings_edit_form', 'settings'];
     $image_style_options = $this->getImageStyleOptions();
 
@@ -121,7 +128,7 @@ trait LightgalleryThumbnailFormatterTrait {
    *   The complete form array.
    */
   public static function settingsFormCustomSettingsElementValidate(array &$element, FormStateInterface $form_state, array &$complete_form): void {
-    $value = json_decode($element['#value'], TRUE, 2);
+    $value = json_decode($element['#value'], TRUE, 3);
 
     if (is_array($value)) {
       $form_state->setValue($element['#parents'], $value);

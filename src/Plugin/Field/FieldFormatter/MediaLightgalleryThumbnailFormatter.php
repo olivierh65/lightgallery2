@@ -216,6 +216,10 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
     if (in_array($source, $this->getSupportedSourcePluginIds(self::SOURCE_IMAGE), TRUE)) {
       /** @var \Drupal\file\FileInterface $file */
       $file = $items->entity;
+      if ($file === NULL) {
+        return [];
+      }
+
       $attributes['data-src'] = $this->getImageUrl($file, $this->getSetting('gallery_image_style'));
 
       return $attributes;
@@ -224,6 +228,9 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
     // Video media.
     /** @var \Drupal\file\FileInterface $thumbnail */
     $thumbnail = $entity->get('thumbnail')->entity;
+    if ($thumbnail === NULL) {
+      return [];
+    }
     $attributes['data-poster'] = $this->getImageUrl($thumbnail, $this->getSetting('gallery_image_style'));
 
     switch ($source) {
@@ -235,7 +242,9 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
       case 'video_file':
         /** @var \Drupal\file\FileInterface $file */
         $file = $items->entity;
-        $attributes['data-src'] = $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri());
+        $attributes['data-video'] = '{"source": [{"src":"' . 
+              $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '", "type": "video/mp4"}], "attributes": {"preload": false, "controls": true}}';
+        // $attributes['data-poster'] = $this->getImageUrl($thumbnail, $this->getSetting('gallery_image_style'));
         break;
     }
 
