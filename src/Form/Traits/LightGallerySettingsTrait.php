@@ -17,7 +17,7 @@ trait LightGallerySettingsTrait {
    */
   protected function getLightGalleryPluginDefinitions(): array {
 
-    $plugins = [
+    $settings = [
       'core' => [
         'label' => $this->t('Core'),
         'open' => FALSE,
@@ -290,269 +290,272 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
           ],
         ],
       ],
-      'zoom' => [
-        'label' => $this->t('Zoom'),
-        'open' => FALSE,
-        'description' => $this->t('Enable pinch to zoom, double-tap, etc.'),
-        'activable' => TRUE,
-        'params' => [
-          'actualSize' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Show actual size button'),
-          ],
-          'enableZoomAfter' => [
-            '#type' => 'number',
-            '#title' => $this->t('Enable zoom after'),
-            '#description' => $this->t('Time in milliseconds to enable zoom after the gallery is opened.'),
-          ],
-          'infiniteZoom' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Infinite zoom'),
-            '#description' => $this->t('Enable infinite zooming.'),
-          ],
-          'scale' => [
-            '#type' => 'number',
-            '#title' => $this->t('Scale'),
-            '#description' => $this->t('Initial zoom scale.'),
+      'plugins' => [
+
+        'zoom' => [
+          'label' => $this->t('Zoom'),
+          'open' => FALSE,
+          'description' => $this->t('Enable pinch to zoom, double-tap, etc.'),
+          'activable' => TRUE,
+          'params' => [
+            'actualSize' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Show actual size button'),
+            ],
+            'enableZoomAfter' => [
+              '#type' => 'number',
+              '#title' => $this->t('Enable zoom after'),
+              '#description' => $this->t('Time in milliseconds to enable zoom after the gallery is opened.'),
+            ],
+            'infiniteZoom' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Infinite zoom'),
+              '#description' => $this->t('Enable infinite zooming.'),
+            ],
+            'scale' => [
+              '#type' => 'number',
+              '#title' => $this->t('Scale'),
+              '#description' => $this->t('Initial zoom scale.'),
+            ],
           ],
         ],
-      ],
-      'thumbnails' => [
-        'label' => $this->t('Thumbnails'),
-        'open' => FALSE,
-        'description' => $this->t('Generate thumbnails, animated support, etc.'),
-        'activable' => TRUE,
-        'params' => [
-          'alignThumbnails' => [
-            '#type' => 'select',
-            '#title' => $this->t('Align thumbnails'),
-            '#options' => [
-              'left' => $this->t('Left'),
-              'center' => $this->t('Center'),
-              'right' => $this->t('Right'),
-            ],
-          ],
-          'animateThumb' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Animate thumbnails'),
-            '#description' => $this->t('Enable animated thumbnails.'),
-          ],
-          'appendThumbnailsTo' => [
-            '#type' => 'select',
-            '#title' => $this->t('Where to append thumbnails'),
-            '#options' => [
-              '.lg-outer' => $this->t('Outer container'),
-              '.lg-item' => $this->t('Item container'),
-            ],
-          ],
-          'currentPagerPosition' => [
-            '#type' => 'select',
-            '#title' => $this->t('Current pager position'),
-            '#options' => [
-              'left' => $this->t('Left'),
-              'center' => $this->t('Center'),
-              'right' => $this->t('Right'),
-            ],
-          ],
-          'enableThumbDrag' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Enable thumbnail drag'),
-            '#description' => $this->t('Allow dragging thumbnails to navigate.'),
-          ],
-          'enableThumbSwipe' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Enable thumbnail swipe'),
-            '#description' => $this->t('Allow swiping thumbnails to navigate.'),
-          ],
-          'loadYoutubeThumbnail' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Load YouTube thumbnail'),
-            '#description' => $this->t('Load the YouTube video thumbnail for thumbnails.'),
-          ],
-          'thumbHeight' => [
-            '#type' => 'number',
-            '#title' => $this->t('Thumbnail height'),
-            '#description' => $this->t('Height of the thumbnails in pixels.'),
-          ],
-          'thumbMargin' => [
-            '#type' => 'number',
-            '#title' => $this->t('Thumbnail margin'),
-            '#description' => $this->t('Margin between thumbnails in pixels.'),
-          ],
-          'thumbWidth' => [
-            '#type' => 'number',
-            '#title' => $this->t('Thumbnail width'),
-            '#description' => $this->t('Width of the thumbnails in pixels.'),
-          ],
-          'thumbnailSwipeThreshold' => [
-            '#type' => 'number',
-            '#title' => $this->t('Thumbnail swipe threshold'),
-            '#description' => $this->t('Threshold for thumbnail swipe navigation in pixels.'),
-          ],
-          'toggleThumb' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Toggle thumbnails'),
-            '#description' => $this->t('Enable toggling thumbnails visibility.'),
-          ],
-          'youTubeThumbSize' => [
-            '#type' => 'number',
-            '#title' => $this->t('YouTube thumbnail size'),
-            '#description' => $this->t('Size of the YouTube thumbnail (default is 1).'),
-          ],
-        ],
-      ],
-      'video' => [
-        'label' => $this->t('Video'),
-        'open' => FALSE,
-        'description' => $this->t('Play videos, supports autoplay, controls, etc.'),
-        'activable' => TRUE,
-        'params' => [
-          'autoplayFirstVideo' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Autoplay first video'),
-            '#description' => $this->t('Automatically play the first video when the gallery is opened.'),
-          ],
-          'autoplayVideoOnSlide' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Autoplay video on slide change'),
-            '#description' => $this->t('Automatically play the video when the slide changes.'),
-          ],
-          'gotoNextSlideOnVideoEnd' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Go to next video on end'),
-            '#description' => $this->t('Automatically go to the next video when the current one ends.'),
-          ],
-          'youTubePlayer' => [
-            'label' => $this->t('Video youTubePlayer'),
-            'open' => FALSE,
-            'description' => $this->t('Play videos, supports autoplay, controls, etc.'),
-            'params' => [
-              'modestbranding' => [
-                '#type' => 'checkbox',
-                '#title' => $this->t('Branding'),
-                '#description' => $this->t('Show YouTube branding.'),
-              ],
-              'rel' => [
-                '#type' => 'checkbox',
-                '#title' => $this->t('Related videos'),
-                '#description' => $this->t('Show related videos at the end.'),
-              ],
-              'showinfo' => [
-                '#type' => 'checkbox',
-                '#title' => $this->t('Show info'),
-                '#description' => $this->t('Show video information (title, uploader, etc.).'),
-              ],
-              'controls' => [
-                '#type' => 'checkbox',
-                '#title' => $this->t('Show controls'),
-                '#description' => $this->t('Show video controls.'),
+        'thumbnails' => [
+          'label' => $this->t('Thumbnails'),
+          'open' => FALSE,
+          'description' => $this->t('Generate thumbnails, animated support, etc.'),
+          'activable' => TRUE,
+          'params' => [
+            'alignThumbnails' => [
+              '#type' => 'select',
+              '#title' => $this->t('Align thumbnails'),
+              '#options' => [
+                'left' => $this->t('Left'),
+                'center' => $this->t('Center'),
+                'right' => $this->t('Right'),
               ],
             ],
-          ],
-        ],
-      ],
-      'hash' => [
-        'label' => $this->t('Hash'),
-        'open' => FALSE,
-        'description' => $this->t('Enable hash navigation for the gallery.'),
-        'activable' => TRUE,
-        'params' => [
-          'customSlideName' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Custom slide name'),
-            '#description' => $this->t('Use custom slide names in the URL hash.'),
-          ],
-        ],
-      ],
-      'autoplay' => [
-        'label' => $this->t('AutoPlay'),
-        'open' => FALSE,
-        'description' => $this->t('Enable automatic slide transitions.'),
-        'activable' => TRUE,
-        'params' => [
-          'appendAutoplayControlsTo' => [
-            '#type' => 'select',
-            '#title' => $this->t('Where to append autoplay controls'),
-            '#options' => [
-              '.lg-toolbar' => $this->t('Toolbar'),
-              '.lg-item' => $this->t('Item'),
+            'animateThumb' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Animate thumbnails'),
+              '#description' => $this->t('Enable animated thumbnails.'),
+            ],
+            'appendThumbnailsTo' => [
+              '#type' => 'select',
+              '#title' => $this->t('Where to append thumbnails'),
+              '#options' => [
+                '.lg-outer' => $this->t('Outer container'),
+                '.lg-item' => $this->t('Item container'),
+              ],
+            ],
+            'currentPagerPosition' => [
+              '#type' => 'select',
+              '#title' => $this->t('Current pager position'),
+              '#options' => [
+                'left' => $this->t('Left'),
+                'center' => $this->t('Center'),
+                'right' => $this->t('Right'),
+              ],
+            ],
+            'enableThumbDrag' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Enable thumbnail drag'),
+              '#description' => $this->t('Allow dragging thumbnails to navigate.'),
+            ],
+            'enableThumbSwipe' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Enable thumbnail swipe'),
+              '#description' => $this->t('Allow swiping thumbnails to navigate.'),
+            ],
+            'loadYoutubeThumbnail' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Load YouTube thumbnail'),
+              '#description' => $this->t('Load the YouTube video thumbnail for thumbnails.'),
+            ],
+            'thumbHeight' => [
+              '#type' => 'number',
+              '#title' => $this->t('Thumbnail height'),
+              '#description' => $this->t('Height of the thumbnails in pixels.'),
+            ],
+            'thumbMargin' => [
+              '#type' => 'number',
+              '#title' => $this->t('Thumbnail margin'),
+              '#description' => $this->t('Margin between thumbnails in pixels.'),
+            ],
+            'thumbWidth' => [
+              '#type' => 'number',
+              '#title' => $this->t('Thumbnail width'),
+              '#description' => $this->t('Width of the thumbnails in pixels.'),
+            ],
+            'thumbnailSwipeThreshold' => [
+              '#type' => 'number',
+              '#title' => $this->t('Thumbnail swipe threshold'),
+              '#description' => $this->t('Threshold for thumbnail swipe navigation in pixels.'),
+            ],
+            'toggleThumb' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Toggle thumbnails'),
+              '#description' => $this->t('Enable toggling thumbnails visibility.'),
+            ],
+            'youTubeThumbSize' => [
+              '#type' => 'number',
+              '#title' => $this->t('YouTube thumbnail size'),
+              '#description' => $this->t('Size of the YouTube thumbnail (default is 1).'),
             ],
           ],
-          'autoplayControls' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Autoplay controls'),
-            '#description' => $this->t('Show autoplay controls in the gallery.'),
-          ],
-          'forceSlideShowAutoplay' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Force slideshow autoplay'),
-            '#description' => $this->t('Force autoplay even if the gallery is not in focus.'),
-          ],
-          'progessBar' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Progress bar'),
-            '#description' => $this->t('Show a progress bar for autoplay.'),
-          ],
-          'slideShowAutoplay' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Slide show autoplay'),
-            '#description' => $this->t('Enable automatic slide transitions.'),
-          ],
-          'slideShowDelay' => [
-            '#type' => 'number',
-            '#title' => $this->t('Slide show delay'),
-            '#description' => $this->t('Delay between slide transitions in milliseconds.'),
+        ],
+        'video' => [
+          'label' => $this->t('Video'),
+          'open' => FALSE,
+          'description' => $this->t('Play videos, supports autoplay, controls, etc.'),
+          'activable' => TRUE,
+          'params' => [
+            'autoplayFirstVideo' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Autoplay first video'),
+              '#description' => $this->t('Automatically play the first video when the gallery is opened.'),
+            ],
+            'autoplayVideoOnSlide' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Autoplay video on slide change'),
+              '#description' => $this->t('Automatically play the video when the slide changes.'),
+            ],
+            'gotoNextSlideOnVideoEnd' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Go to next video on end'),
+              '#description' => $this->t('Automatically go to the next video when the current one ends.'),
+            ],
+            'youTubePlayer' => [
+              'label' => $this->t('Video youTubePlayer'),
+              'open' => FALSE,
+              'description' => $this->t('Play videos, supports autoplay, controls, etc.'),
+              'params' => [
+                'modestbranding' => [
+                  '#type' => 'checkbox',
+                  '#title' => $this->t('Branding'),
+                  '#description' => $this->t('Show YouTube branding.'),
+                ],
+                'rel' => [
+                  '#type' => 'checkbox',
+                  '#title' => $this->t('Related videos'),
+                  '#description' => $this->t('Show related videos at the end.'),
+                ],
+                'showinfo' => [
+                  '#type' => 'checkbox',
+                  '#title' => $this->t('Show info'),
+                  '#description' => $this->t('Show video information (title, uploader, etc.).'),
+                ],
+                'controls' => [
+                  '#type' => 'checkbox',
+                  '#title' => $this->t('Show controls'),
+                  '#description' => $this->t('Show video controls.'),
+                ],
+              ],
+            ],
           ],
         ],
-      ],
-      'rotate' => [
-        'label' => $this->t('Rotate'),
-        'open' => FALSE,
-        'description' => $this->t('Enable rotation of images.'),
-        'activable' => TRUE,
-        'params' => [
-          'flipHorizontal' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Flip horizontal'),
-            '#description' => $this->t('Enable flipping images horizontally.'),
-          ],
-          'flipVertical' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Flip vertical'),
-            '#description' => $this->t('Enable flipping images vertically.'),
-          ],
-          'rotateLeft' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Rotate left'),
-            '#description' => $this->t('Enable rotating images to the left.'),
-          ],
-          'rotateRight' => [
-            '#type' => 'checkbox',
-            '#title' => $this->t('Rotate right'),
-            '#description' => $this->t('Enable rotating images to the right.'),
-          ],
-          'rotateStep' => [
-            '#type' => 'number',
-            '#title' => $this->t('Rotate step'),
-            '#description' => $this->t('Step in degrees for rotating images.'),
+        'hash' => [
+          'label' => $this->t('Hash'),
+          'open' => FALSE,
+          'description' => $this->t('Enable hash navigation for the gallery.'),
+          'activable' => TRUE,
+          'params' => [
+            'customSlideName' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Custom slide name'),
+              '#description' => $this->t('Use custom slide names in the URL hash.'),
+            ],
           ],
         ],
-      ],
-      'pager' => [
-        'label' => $this->t('Pager'),
-        'open' => FALSE,
-        'description' => $this->t('Enable a pager for navigating through slides.'),
-        'activable' => TRUE,
-      ],
-      'fullscreen' => [
-        'label' => $this->t('Fullscreen'),
-        'open' => FALSE,
-        'description' => $this->t('Enable fullscreen mode for the gallery.'),
-        'activable' => TRUE,
-      ],
+        'autoplay' => [
+          'label' => $this->t('AutoPlay'),
+          'open' => FALSE,
+          'description' => $this->t('Enable automatic slide transitions.'),
+          'activable' => TRUE,
+          'params' => [
+            'appendAutoplayControlsTo' => [
+              '#type' => 'select',
+              '#title' => $this->t('Where to append autoplay controls'),
+              '#options' => [
+                '.lg-toolbar' => $this->t('Toolbar'),
+                '.lg-item' => $this->t('Item'),
+              ],
+            ],
+            'autoplayControls' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Autoplay controls'),
+              '#description' => $this->t('Show autoplay controls in the gallery.'),
+            ],
+            'forceSlideShowAutoplay' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Force slideshow autoplay'),
+              '#description' => $this->t('Force autoplay even if the gallery is not in focus.'),
+            ],
+            'progessBar' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Progress bar'),
+              '#description' => $this->t('Show a progress bar for autoplay.'),
+            ],
+            'slideShowAutoplay' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Slide show autoplay'),
+              '#description' => $this->t('Enable automatic slide transitions.'),
+            ],
+            'slideShowDelay' => [
+              '#type' => 'number',
+              '#title' => $this->t('Slide show delay'),
+              '#description' => $this->t('Delay between slide transitions in milliseconds.'),
+            ],
+          ],
+        ],
+        'rotate' => [
+          'label' => $this->t('Rotate'),
+          'open' => FALSE,
+          'description' => $this->t('Enable rotation of images.'),
+          'activable' => TRUE,
+          'params' => [
+            'flipHorizontal' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Flip horizontal'),
+              '#description' => $this->t('Enable flipping images horizontally.'),
+            ],
+            'flipVertical' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Flip vertical'),
+              '#description' => $this->t('Enable flipping images vertically.'),
+            ],
+            'rotateLeft' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Rotate left'),
+              '#description' => $this->t('Enable rotating images to the left.'),
+            ],
+            'rotateRight' => [
+              '#type' => 'checkbox',
+              '#title' => $this->t('Rotate right'),
+              '#description' => $this->t('Enable rotating images to the right.'),
+            ],
+            'rotateStep' => [
+              '#type' => 'number',
+              '#title' => $this->t('Rotate step'),
+              '#description' => $this->t('Step in degrees for rotating images.'),
+            ],
+          ],
+        ],
+        'pager' => [
+          'label' => $this->t('Pager'),
+          'open' => FALSE,
+          'description' => $this->t('Enable a pager for navigating through slides.'),
+          'activable' => TRUE,
+        ],
+        'fullscreen' => [
+          'label' => $this->t('Fullscreen'),
+          'open' => FALSE,
+          'description' => $this->t('Enable fullscreen mode for the gallery.'),
+          'activable' => TRUE,
+        ],
+      ]
     ];
 
-    return $plugins;
+    return $settings;
   }
 
   /**
@@ -570,11 +573,17 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
    * @return array
    *   The modified form array.
    */
-  protected function buildPluginParamsForm(array $plugin_data, array $plugin_config, string $prefix = '', bool $wrap = TRUE): array {
+  private function buildParamsForm(
+    array $plugin_data,
+    array $plugin_config,
+    string $label,
+    string $prefix = '',
+    bool $wrap = TRUE
+  ): array {
     $form = [];
 
     foreach ($plugin_data as $key => $element) {
-      // Cas 1 : élément simple (#type présent)
+      // Cas 1 : élément simple (champ avec #type)
       if (isset($element['#type'])) {
         $config_key = trim("$prefix.$key", '.');
         $element['#default_value'] = $plugin_config[$key] ?? '';
@@ -582,10 +591,11 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
         $form[$key] = $element;
       }
 
-      // Cas 2 : sous-groupe avec 'params'
-      elseif (isset($element['params']) && is_array($element['params'])) {
+      // Cas 2 : sous-groupe contenant "params"
+      elseif (is_array($element) && isset($element['params'])) {
         $config_key = trim("$prefix.$key.params", '.');
 
+        // Conteneur details pour ce groupe
         $wrapper = [
           '#type' => 'details',
           '#title' => $element['label'] ?? ucfirst($key),
@@ -594,9 +604,11 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
           '#tree' => TRUE,
         ];
 
-        $wrapper['params'] = $this->buildPluginParamsForm(
+        // Ajout récursif des sous-éléments
+        $wrapper['params'] = $this->buildParamsForm(
           $element['params'],
           $plugin_config[$key]['params'] ?? [],
+          $element['label'] ?? ucfirst($key),
           $config_key,
           FALSE
         );
@@ -605,11 +617,11 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
       }
     }
 
-    // Si premier niveau, encapsule dans un details
+    // Premier niveau : encapsulation dans un details global
     if ($wrap) {
       return [
         '#type' => 'details',
-        '#title' => $this->t('Plugin options'),
+        '#title' => $this->t('@label settings', ['@label' => $label]),
         '#open' => TRUE,
         '#tree' => TRUE,
       ] + $form;
@@ -621,7 +633,9 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
 
 
 
-  protected function buildPluginSettingsForm(array $form, FormStateInterface $form_state, array $plugin_definitions, array $plugin_config): array {
+  private function buildPluginForm(array $plugin_definitions, array $plugin_config, string $type): array {
+    $form = [];
+
     foreach ($plugin_definitions as $plugin_key => $plugin_data) {
       $config = $plugin_config[$plugin_key] ?? [];
 
@@ -645,17 +659,18 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
 
       // Ajouter les paramètres du plugin dans un bloc "params" conditionnel
       if (!empty($plugin_data['params'])) {
-        $params_wrapper = $this->buildPluginParamsForm(
+        $params_wrapper = $this->buildParamsForm(
           $plugin_data['params'],
           $config['params'] ?? [],
-          "plugins.$plugin_key.params"
+          $plugin_data['label'] ?? ucfirst($plugin_key),
+          "$type.$plugin_key.params"
         );
 
         // Si activable, ajoute condition d’affichage sur la checkbox
         if (!empty($plugin_data['activable'])) {
           $params_wrapper['#states'] = [
             'visible' => [
-              ":input[name='{$plugin_key}[enabled]']" => ['checked' => TRUE],
+              ":input[name='plugins[{$plugin_key}][enabled]']" => ['checked' => TRUE],
             ],
           ];
         }
@@ -664,6 +679,27 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
       }
     }
 
+    return $form;
+  }
+
+  protected function buildCoreSettingsForm(array $plugin_definitions, \Drupal\Core\Config\Config $plugin_config): array {
+    $form = [];
+    $form = $this->buildPluginForm(
+      ['core' => $plugin_definitions['core']],
+      ['core' => $plugin_config->get('core') ?? []],
+      ''
+    )['core'];
+
+    return $form;
+  }
+
+  protected function buildPluginSettingsForm(array $plugin_definitions, \Drupal\Core\Config\Config $plugin_config): array {
+    $form = [];
+    $form = $this->buildPluginForm(
+      $plugin_definitions['plugins'],
+      $plugin_config->get('plugins') ?? [],
+      'plugins'
+    );
     return $form;
   }
 }

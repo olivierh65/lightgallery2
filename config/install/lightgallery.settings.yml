@@ -1,55 +1,55 @@
+
+core:
+  params:
+    license_key: '0000-0000-0000-0000'
+    addClass : ''
+    allowMediaOverlap : false
+    appendCounterTo : '.lg-toolbar'
+    appendSubHtmlTo : '.lg-sub-html'
+    backdropDuration: 300
+    closable: true
+    closeOnTap: true
+    controls: true
+    counter: true
+    defaultCaptionHeight: 0
+    download: true
+    easing : 'ease'
+    enableDrag: true
+    enableSwipe: true
+    escapeKey: true
+    height : '100%'
+    hideBarsDelay: 3000
+    hideControlOnEnd: false
+    hideScrollbars: true
+    iframeHeight: '100%'
+    iframeMaxHeight: '100%'
+    iframeMaxWidth: '100%'
+    iframeWidth: '100%'
+    index: 0
+    isMobile: false
+    keyPress: true
+    loadYoutubePoster: true
+    loop: false
+    mode: 'lg-slide'
+    mousewheel: false
+    nextHtml: ''
+    prevHtml: ''
+    numberOfSlideItemsInDom: 10
+    preload: 2
+    resetScrollPosition: true
+    showBarsAfter: 10000
+    showCloseIcon: true
+    showMaximizeIcon: true
+    slideDelay: 0
+    slideEndAnimatoin: true
+    speed: 400
+    swipeThreshold: 50
+    swipeToClose: true
+    videoMaxSize: '1280-720'
+    width : '100%'
+    zoomFromOrigin: true
+
 plugins:
-  core:
-    params:
-      license_key: '0000-0000-0000-0000'
-      addClass : ''
-      allowMediaOverlap : false
-      appendCounterTo : '.lg-toolbar'
-      appendSubHtmlTo : '.lg-sub-html'
-      backdropDuration: 300
-      closable: true
-      closeOnTap: true
-      controls: true
-      counter: true
-      defaultCaptionHeight: 0
-      download: true
-      easing : 'ease'
-      enableDrag: true
-      enableSwipe: true
-      escapeKey: true
-      height : '100%'
-      hideBarsDelay: 3000
-      hideControlOnEnd: false
-      hideScrollbars: true
-      iframeHeight: '100%'
-      iframeMaxHeight: '100%'
-      iframeMaxWidth: '100%'
-      iframeWidth: '100%'
-      index: 0
-      isMobile: false
-      keyPress: true
-      loadYoutubePoster: true
-      loop: false
-      mode: 'lg-slide'
-      mousewheel: false
-      nextHtml: ''
-      prevHtml: ''
-      numberOfSlideItemsInDom: 10
-      preload: 2
-      resetScrollPosition: true
-      showBarsAfter: 10000
-      showCloseIcon: true
-      showMaximizeIcon: true
-      slideDelay: 0
-      slideEndAnimatoin: true
-      speed: 400
-      swipeThreshold: 50
-      swipeToClose: true
-      videoMaxSize: '1280-720'
-      width : '100%'
-      zoomFromOrigin: true
-
-
   zoom:
     enabled: true
     params:

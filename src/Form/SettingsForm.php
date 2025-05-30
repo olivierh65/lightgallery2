@@ -31,17 +31,36 @@ class SettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
-    $form['plugins'] = [
+    /* $form['plugins'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('LightGallery options'),
       '#description' => $this->t('Configure the LightGallery plugins and their options.'),
       '#open' => TRUE,
       '#tree' => TRUE,
-    ];
+    ]; */
 
-    $plugin_definitions = $this->getLightGalleryPluginDefinitions();
-    $plugin_config = $this->config('lightgallery.settings')->get('plugins') ?? [];
-    $form['plugins'] = $this->buildPluginSettingsForm($form, $form_state, $plugin_definitions, $plugin_config);
+    $definitions = $this->getLightGalleryPluginDefinitions();
+    $config = $this->config('lightgallery.settings');
+
+    // Bloc Core
+    $form['core'] = $this->buildCoreSettingsForm(
+      $definitions,
+      $config ?? []
+    );
+
+    // Bloc Plugins
+    $form['plugins'] = [
+      '#type' => 'details',
+      '#title' => $this->t('LightGallery Plugins'),
+      '#description' => $this->t('Configure the LightGallery plugins.'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+    ];
+    $form['plugins'] += $this->buildPluginSettingsForm(
+      $definitions,
+      $config ?? []
+    );
+
     return parent::buildForm($form, $form_state);
   }
 

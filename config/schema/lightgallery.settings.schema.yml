@@ -2,165 +2,164 @@ lightgallery.settings:
   type: config_object
   label: LightGallery Settings
   mapping:
+    core:
+      type: mapping
+      label: Core settings
+      mapping:
+        params:
+          type: mapping
+          label: Core parameters
+          mapping:
+            license_key:
+              type: string
+              label: License key
+              constraints:
+                NotBlank: {}
+                Regex:
+                  pattern: /^[A-Z0-9]+(-[A-Z0-9]+)+$/
+                  message: The license key is not valid.
+            addClass:
+              type: string
+              label: Additional class
+            allowMediaOverlap:
+              type: boolean
+              label: Allow media overlap
+            appendCounterTo:
+              type: string
+              label: Append counter to
+            appendSubHtmlTo:
+              type: string
+              label: Append sub HTML to
+            backdropDuration:
+              type: integer
+              label: Backdrop duration
+            closable:
+              type: boolean
+              label: Closable
+            closeOnTap:
+              type: boolean
+              label: Close on tap
+            controls:
+              type: boolean
+              label: Controls
+            counter:
+              type: boolean
+              label: Counter
+            defaultCaptionHeight:
+              type: integer
+              label: Default caption height
+            download:
+              type: boolean
+              label: Download
+            easing:
+              type: string
+              label: Easing
+            enableDrag:
+              type: boolean
+              label: Enable drag
+            enableSwipe:
+              type: boolean
+              label: Enable swipe
+            escapeKey:
+              type: boolean
+              label: Escape key
+            height:
+              type: string
+              label: Height
+            hideBarsDelay:
+              type: integer
+              label: Hide bars delay
+            hideControlOnEnd:
+              type: boolean
+              label: Hide control on end
+            hideScrollbars:
+              type: boolean
+              label: Hide scrollbar
+            iframeHeight:
+              type: string
+              label: Iframe height
+            iframeMaxHeight:
+              type: string
+              label: Iframe max height
+            iframeMaxWidth:
+              type: string
+              label: Iframe max width
+            iframeWidth:
+              type: string
+              label: Iframe width
+            index:
+              type: integer
+              label: Initial index
+            isMobile:
+              type: boolean
+              label: Is mobile
+            keyPress:
+              type: boolean
+              label: Key press
+            loadYoutubePoster:
+              type: boolean
+              label: LAutomatically load poster image for YouTube videos
+            loop:
+              type: boolean
+              label: Loop
+            mode:
+              type: string
+              label: Mode
+            mousewheel:
+              type: boolean
+              label: Mouse wheel
+            nextHtml:
+              type: string
+              label: Next HTML
+            prevHtml:
+              type: string
+              label: Previous HTML
+            numberOfSlideItemsInDom:
+              type: integer
+              label: Number of slide items in DOM
+            preload:
+              type: integer
+              label: Preload
+            resetScrollPosition:
+              type: boolean
+              label: Reset scroll position
+            showBarsAfter:
+              type: integer
+              label: Show bars after
+            showCloseIcon:
+              type: boolean
+              label: Show close icon
+            showMaximizeIcon:
+              type: boolean
+              label: Show maximize icon
+            slideDelay:
+              type: integer
+              label: Slide delay
+            slideEndAnimatoin:
+              type: boolean
+              label: Slide end animation
+            speed:
+              type: integer
+              label: Speed
+            swipeThreshold:
+              type: integer
+              label: Swipe threshold
+            swipeToClose:
+              type: boolean
+              label: Swipe to close
+            videoMaxSize:
+              type: string
+              label: Video max size
+            width:
+              type: string
+              label: Width
+            zoomFromOrigin:
+              type: boolean
+              label: Zoom from origin
     plugins:
       type: mapping
       label: Plugin settings
       mapping:
-        core:
-          type: mapping
-          label: Core settings
-          mapping:
-            params:
-              type: mapping
-              label: Core parameters
-              mapping:
-                license_key:
-                  type: string
-                  label: License key
-                  constraints:
-                    NotBlank: {}
-                    Regex:
-                      pattern: /^[A-Z0-9]+(-[A-Z0-9]+)+$/
-                      message: The license key is not valid.
-                addClass:
-                  type: string
-                  label: Additional class
-                allowMediaOverlap:
-                  type: boolean
-                  label: Allow media overlap
-                appendCounterTo:
-                  type: string
-                  label: Append counter to
-                appendSubHtmlTo:
-                  type: string
-                  label: Append sub HTML to
-                backdropDuration:
-                  type: integer
-                  label: Backdrop duration
-                closable:
-                  type: boolean
-                  label: Closable
-                closeOnTap:
-                  type: boolean
-                  label: Close on tap
-                controls:
-                  type: boolean
-                  label: Controls
-                counter:
-                  type: boolean
-                  label: Counter
-                defaultCaptionHeight:
-                  type: integer
-                  label: Default caption height
-                download:
-                  type: boolean
-                  label: Download
-                easing:
-                  type: string
-                  label: Easing
-                enableDrag:
-                  type: boolean
-                  label: Enable drag
-                enableSwipe:
-                  type: boolean
-                  label: Enable swipe
-                escapeKey:
-                  type: boolean
-                  label: Escape key
-                height:
-                  type: string
-                  label: Height
-                hideBarsDelay:
-                  type: integer
-                  label: Hide bars delay
-                hideControlOnEnd:
-                  type: boolean
-                  label: Hide control on end
-                hideScrollbars:
-                  type: boolean
-                  label: Hide scrollbar
-                iframeHeight:
-                  type: string
-                  label: Iframe height
-                iframeMaxHeight:
-                  type: string
-                  label: Iframe max height
-                iframeMaxWidth:
-                  type: string
-                  label: Iframe max width
-                iframeWidth:
-                  type: string
-                  label: Iframe width
-                index:
-                  type: integer
-                  label: Initial index
-                isMobile:
-                  type: boolean
-                  label: Is mobile
-                keyPress:
-                  type: boolean
-                  label: Key press
-                loadYoutubePoster:
-                  type: boolean
-                  label: LAutomatically load poster image for YouTube videos
-                loop:
-                  type: boolean
-                  label: Loop
-                mode:
-                  type: string
-                  label: Mode
-                mousewheel:
-                  type: boolean
-                  label: Mouse wheel
-                nextHtml:
-                  type: string
-                  label: Next HTML
-                prevHtml:
-                  type: string
-                  label: Previous HTML
-                numberOfSlideItemsInDom:
-                  type: integer
-                  label: Number of slide items in DOM
-                preload:
-                  type: integer
-                  label: Preload
-                resetScrollPosition:
-                  type: boolean
-                  label: Reset scroll position
-                showBarsAfter:
-                  type: integer
-                  label: Show bars after
-                showCloseIcon:
-                  type: boolean
-                  label: Show close icon
-                showMaximizeIcon:
-                  type: boolean
-                  label: Show maximize icon
-                slideDelay:
-                  type: integer
-                  label: Slide delay
-                slideEndAnimatoin:
-                  type: boolean
-                  label: Slide end animation
-                speed:
-                  type: integer
-                  label: Speed
-                swipeThreshold:
-                  type: integer
-                  label: Swipe threshold
-                swipeToClose:
-                  type: boolean
-                  label: Swipe to close
-                videoMaxSize:
-                  type: string
-                  label: Video max size
-                width:
-                  type: string
-                  label: Width
-                zoomFromOrigin:
-                  type: boolean
-                  label: Zoom from origin
-
         zoom:
           type: mapping
           label: Zoom plugin
