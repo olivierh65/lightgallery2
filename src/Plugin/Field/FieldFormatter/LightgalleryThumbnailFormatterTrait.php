@@ -3,6 +3,7 @@
 namespace Drupal\lightgallery\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightgallery\Traits\LightGallerySettingsTrait;
 
 /**
  * Trait for lightGallery thumbnail formatters.
@@ -10,18 +11,35 @@ use Drupal\Core\Form\FormStateInterface;
 trait LightgalleryThumbnailFormatterTrait {
 
   use EntityReferenceLightgalleryFormatterTrait;
+  use LightGallerySettingsTrait;
 
   /**
    * {@inheritdoc}
    */
+  /**
+   * Returns the default settings for the Lightgallery thumbnail formatter.
+   *
+   * This method retrieves configuration values from the 'lightgallery.settings'
+   * configuration object and merges them with the parent class's default
+   * settings. It sets up default values for inline display, image styles,
+   * loading behavior, and custom settings. Additionally, it loads the core and
+   * plugin settings for Lightgallery from configuration.
+   *
+   * @return array
+   *   An associative array containing the default settings for the formatter.
+   */
   public static function defaultSettings(): array {
-    return [
+    $config = \Drupal::config('lightgallery.settings');
+    $settings = [
       'inline' => FALSE,
       'thumbnail_image_style' => NULL,
       'thumbnail_loading' => 'lazy',
       'gallery_image_style' => NULL,
       'custom_settings' => [],
     ] + parent::defaultSettings();
+    $settings['lightgallery_settings']['core'] = $config->get('core') ?? [];
+    $settings['lightgallery_settings']['plugins'] = $config->get('plugins') ?? [];
+    return $settings;
   }
 
   /**
@@ -33,10 +51,59 @@ trait LightgalleryThumbnailFormatterTrait {
     $config = \Drupal::config('lightgallery.settings');
     $enabled_plugins = $config->get('plugins') ?? [];
     $enabled_plugins = array_filter($enabled_plugins, function ($plugin) {
-      return !empty($plugin);
+      return $plugin['enabled'] ?? FALSE;
     });
 
-    
+    /**
+     * Merges global and entity-specific Lightgallery configuration settings.
+     *
+     * Retrieves global Lightgallery settings from configuration and merges them
+     * with entity-specific settings for both core parameters and plugins.
+     * Entity-specific settings take precedence over global settings.
+     *
+     * @var \Drupal\Core\Config\ImmutableConfig $global_config
+     *   The global Lightgallery configuration object.
+     * @var array $global_plugins
+     *   The global plugins configuration array.
+     * @var array $global_core
+     *   The global core parameters configuration array.
+     * @var array $entity_core
+     *   The entity-specific core parameters configuration array.
+     * @var array $entity_plugins
+     *   The entity-specific plugins configuration array.
+     * @var array $core_effective
+     *   The merged core parameters, with entity settings overriding global ones.
+     * @var array $plugins_effective
+     *   The merged plugins configuration, with entity settings overriding global ones.
+     * @var array $final_config
+     *   The final merged configuration array to be used by Lightgallery.
+     */
+    $global_config = \Drupal::config('lightgallery.settings');
+    $global_plugins = $global_config->get('plugins') ?? [];
+    $global_core = $global_config->get('core.params') ?? [];
+
+    $entity_core = $this->getSetting('lightgallery_settings')['core']['params'] ?? [];
+    $entity_plugins = $this->getSetting('lightgallery_settings')['plugins'] ?? [];
+
+    $core_effective = array_replace_recursive($global_core, $entity_core);
+    $plugins_effective = array_replace_recursive($global_plugins, $entity_plugins);
+
+    $final_config = [
+      'core' => [
+        'params' => $core_effective,
+      ],
+      'plugins' => $plugins_effective,
+    ];
+
+
+    /**
+     * Builds the array of parent keys for accessing the field's settings edit form.
+     *
+     * @var array $parents
+     *   An array containing the hierarchical keys to access the settings of the
+     *   current field in the settings edit form. The field name is dynamically
+     *   retrieved from the field definition.
+     */
     $parents = ['fields', $this->fieldDefinition->getName(), 'settings_edit_form', 'settings'];
     $image_style_options = $this->getImageStyleOptions();
 
@@ -114,6 +181,64 @@ trait LightgalleryThumbnailFormatterTrait {
       '#element_validate' => [[static::class, 'settingsFormCustomSettingsElementValidate']],
     ];
 
+    /**
+     * Builds the LightGallery settings form elements for a field formatter.
+     *
+     * This section of the form allows users to configure core LightGallery settings
+     * and plugin-specific options. It creates a details element for LightGallery
+     * settings, including nested details for plugin configuration.
+     *
+     * - The 'lightgallery_settings' details element contains the main configuration.
+     * - The 'core' sub-element is populated by buildCoreSettingsForm(), which
+     *   provides core LightGallery options.
+     * - The 'plugins' sub-element is a details element populated by
+     *   buildPluginSettingsForm(), allowing configuration of individual plugins.
+     *
+     * @param array $parents
+     *   The parent form element keys for proper nesting.
+     * @param array $final_config
+     *   The final configuration values for the LightGallery settings.
+     *
+     * @return array
+     *   The form elements for LightGallery settings and plugins.
+     */
+    $parents_lg = $parents;
+    $parents_lg[] = 'lightgallery_settings';
+
+    $form['lightgallery_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('LightGallery settings'),
+      '#description' => $this->t('Configure the LightGallery plugins and their options.'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+      #'#parents' => $parents_lg,
+      '#parents' => ['fields', $this->fieldDefinition->getName(), 'settings_edit_form', 'settings', 'lightgallery_settings'],
+    ];
+
+    // Core settings.
+    // The core settings returned by buildCoreSettingsForm() are based on the
+    // final configuration, which includes both global and entity-specific settings.
+    // it include a details element with the title 'Core Settings' and a description.
+
+    $form['lightgallery_settings']['core'] = $this->buildCoreSettingsForm(
+      $this->getLightGalleryPluginDefinitions(),
+      $final_config ?? [],
+      ['fields', $this->fieldDefinition->getName(), 'settings_edit_form', 'settings', 'lightgallery_settings'],
+    );
+
+    $form['lightgallery_settings']['plugins'] = [
+      '#type' => 'details',
+      '#title' => $this->t('LightGallery Plugins'),
+      '#description' => $this->t('Configure the LightGallery plugins.'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+      # '#parents' => ['settings', 'lightgallery_settings', 'plugins'],
+    ];
+    $form['lightgallery_settings']['plugins'] += $this->buildPluginSettingsForm(
+      $this->getLightGalleryPluginDefinitions(),
+      $final_config ?? [],
+      ['fields', $this->fieldDefinition->getName(), 'settings_edit_form', 'settings', 'lightgallery_settings', 'plugins'],
+    );
     return $form;
   }
 
@@ -132,8 +257,7 @@ trait LightgalleryThumbnailFormatterTrait {
 
     if (is_array($value)) {
       $form_state->setValue($element['#parents'], $value);
-    }
-    else {
+    } else {
       $form_state->setError($element, t('The custom settings are not a valid JSON object.'));
     }
   }
@@ -143,6 +267,10 @@ trait LightgalleryThumbnailFormatterTrait {
    */
   public function settingsSummary(): array {
     $summary = [];
+
+    $lightgallery = $this->getSetting('lightgallery_settings');
+    # \Drupal::logger('lightgallery')->notice('<pre>' . print_r($lightgallery, TRUE) . '</pre>');
+
 
     if ($this->getSetting('inline')) {
       $summary[] = $this->t('Inline gallery');
@@ -158,10 +286,14 @@ trait LightgalleryThumbnailFormatterTrait {
       $summary[] = $this->t('Gallery image style: %style', [
         '%style' => $this->getImageStyleLabel($this->getSetting('gallery_image_style')),
       ]);
-    }
-    else {
+    } else {
       $summary[] = $this->t('Original image in gallery');
     }
+
+    $lightgallery = $this->getSetting('lightgallery_settings');
+    $enabled_plugins = array_filter($lightgallery['plugins'] ?? [], fn($plugin) => ($plugin['enabled'] ?? FALSE));
+    $summary[] = $this->t('Enabled plugins: @list', ['@list' => implode(', ', array_keys($enabled_plugins))]);
+
 
     return $summary;
   }
@@ -194,7 +326,48 @@ trait LightgalleryThumbnailFormatterTrait {
    * {@inheritdoc}
    */
   protected function getLightgallerySettings(): array {
+
     $settings = $this->getSetting('custom_settings');
+
+    // Add the core settings from the configuration.
+    $core_settings_def = $this->getLightGalleryPluginDefinitions()['core']['params'];
+    $core_settings = $this->getSetting('lightgallery_settings')['core']['params'] ?? [];
+    foreach ($core_settings as $key => $value) {
+      if (isset($core_settings_def[$key]['#access']) && $core_settings_def[$key]['#access'] === FALSE) {
+        // Skip settings that are not accessible.
+        continue;
+      }
+      // Adds a non-empty value to the settings array.
+      if (! empty($value)) {
+        $settings[$key] = $value;
+      }
+    }
+
+
+    // Add enabled plugins, their parameters and javascript libraries.
+    $plugins_library = $this->getPluginsLibrary();
+    $plugins_settings_def = $this->getLightGalleryPluginDefinitions()['plugins'];
+    $plugins = [];
+    $settings['plugins'] = [];
+    $plugin_settings = $this->getSetting('lightgallery_settings')['plugins'] ?? [];
+    foreach ($plugin_settings as $plugin_id => $plugin_config) {
+      if (!empty($plugin_config['enabled'])) {
+        $plugins[] = $plugin_id;
+        $settings['plugins'][] = $plugins_library[$plugin_id];
+        $settings['#attached']['library'][] = 'lightgallery/lightgallery-' . $plugins_library[$plugin_id];
+        foreach ($plugin_config['params'] ?? [] as $key => $value) {
+          if (isset($plugins_settings_def[$plugin_id]['params'][$key]['#access']) && $plugins_settings_def[$plugin_id]['params'][$key]['#access'] === FALSE) {
+            // Skip settings that are not accessible.
+            continue;
+          }
+          if (!empty($value)) {
+            $settings[$key] = $value;
+          }
+        }
+        $settings[$plugin_id] = true;
+      }
+    }
+
     $settings += [
       'thumbnail' => $this->fieldDefinition->getFieldStorageDefinition()->getCardinality() !== 1,
     ];
@@ -205,5 +378,4 @@ trait LightgalleryThumbnailFormatterTrait {
 
     return $settings;
   }
-
 }

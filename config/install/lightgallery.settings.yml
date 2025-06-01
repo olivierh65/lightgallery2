@@ -58,7 +58,7 @@ plugins:
       infiniteZoom : true
       scale: 1
 
-  thumbnails:
+  thumbnail:
     enabled: false
     params:
       alignThumbnails : 'middle'

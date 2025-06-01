@@ -125,6 +125,9 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary(): array {
+    
+    # \Drupal::logger('lightgallery - settingsSummary')->notice('<pre>' . print_r($this->getSettings(), TRUE) . '</pre>');
+
     $summary = $this->traitSettingsSummary();
     $caption_view_mode = $this->getSetting('caption_view_mode');
 
@@ -142,6 +145,10 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state): array {
+
+    # \Drupal::logger('lightgallery - settingsForm')->notice('settingsForm called');
+    # \Drupal::logger('lightgallery - settingsForm')->notice((new \Exception())->getTraceAsString());
+
     $form = $this->traitSettingsForm($form, $form_state);
 
     $default = $this->getSetting('caption_view_mode');

@@ -184,7 +184,7 @@ lightgallery.settings:
                   type: number
                   label: Zoom scale
 
-        thumbnails:
+        thumbnail:
           type: mapping
           label: Thumbnails plugin
           mapping:

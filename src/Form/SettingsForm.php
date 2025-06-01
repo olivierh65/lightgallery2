@@ -4,7 +4,7 @@ namespace Drupal\lightgallery\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\lightgallery\Form\Traits\LightGallerySettingsTrait;
+use Drupal\lightgallery\Traits\LightGallerySettingsTrait;
 
 /**
  * Provides a form to edit the settings.
@@ -45,7 +45,12 @@ class SettingsForm extends ConfigFormBase {
     // Bloc Core
     $form['core'] = $this->buildCoreSettingsForm(
       $definitions,
-      $config ?? []
+      $config ?? [],
+      [
+        'lightgallery_settings',
+        'core',
+        'params',
+      ]
     );
 
     // Bloc Plugins
@@ -58,7 +63,11 @@ class SettingsForm extends ConfigFormBase {
     ];
     $form['plugins'] += $this->buildPluginSettingsForm(
       $definitions,
-      $config ?? []
+      $config ?? [],
+      [
+        'lightgallery_settings',
+        'plugins',
+      ]
     );
 
     return parent::buildForm($form, $form_state);
