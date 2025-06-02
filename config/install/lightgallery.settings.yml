@@ -1,7 +1,7 @@
 
 core:
   params:
-    license_key: '0000-0000-0000-0000'
+    licenseKey : '0000-0000-0000-0000'
     addClass : ''
     allowMediaOverlap : false
     appendCounterTo : '.lg-toolbar'
@@ -73,7 +73,7 @@ plugins:
       thumbWidth : 100
       thumbnailSwipeThreshold : 10
       toggleThumb : true
-      youTubeThumbSize : 1  
+      youTubeThumbSize : 1
 
   video:
     enabled: false
@@ -114,8 +114,7 @@ plugins:
 
   pager:
     enabled: false
-    
+
   fullscreen:
     enabled: false
-    
-  
+

@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 trait LightGallerySettingsTrait {
 
-    /**
+  /**
    * Returns an associative array mapping LightGallery plugin keys to their library names.
    *
    * This method provides a list of available LightGallery plugins and their corresponding
@@ -85,7 +85,7 @@ trait LightGallerySettingsTrait {
         'description' => $this->t('Core LightGallery settings.'),
         'activable' => FALSE,
         'params' => [
-          'license_key' => [
+          'licenseKey' => [
             '#type' => 'textfield',
             '#title' => $this->t('License key'),
             '#required' => TRUE,
@@ -94,7 +94,7 @@ trait LightGallerySettingsTrait {
             '#type' => 'textfield',
             '#title' => $this->t('Additional class'),
             '#description' => $this->t('Add a custom class to the gallery container.'),
-            '#access' =>FALSE,
+            '#access' => FALSE,
           ],
           'allowMediaOverlap' => [
             '#type' => 'checkbox',
@@ -282,7 +282,35 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
             '#options' => [
               'lg-slide' => $this->t('Slide'),
               'lg-fade' => $this->t('Fade'),
-              'lg-zoom-in-out' => $this->t('Zoom In/Out'),
+              'lg-zoom-in' => $this->t('Zoom-In'),
+              'lg-zoom-in-big' => $this->t('Zoom-In-Big'),
+              'lg-zoom-out' => $this->t('Zoom-Out'),
+              'lg-zoom-out-big' => $this->t('Zoom-Out-Big'),
+              'lg-zoom-out-in' => $this->t('Zoom-Out-In'),
+              'lg-zoom-in-out' => $this->t('Zoom-In-Out'),
+              'lg-soft-zoom' => $this->t('Soft-Zoom'),
+              'lg-scale-up' => $this->t('Scale-Up'),
+              'lg-slide-circular' => $this->t('Slide-Circular'),
+              'lg-slide-circular-vertical' => $this->t('Slide-Circular-Vertical'),
+              'lg-slide-vertical' => $this->t('Slide-Vertical'),
+              'lg-slide-vertical-growth' => $this->t('Slide-Vertical-Growth'),
+              'lg-slide-skew-only' => $this->t('Slide-Skew-Only'),
+              'lg-slide-skew-only-rev' => $this->t('Slide-Skew-Only-Rev'),
+              'lg-slide-skew-only-y' => $this->t('Slide-Skew-Only-Y'),
+              'lg-slide-skew-only-y-rev' => $this->t('Slide-Skew-Only-Y-Rev'),
+              'lg-slide-skew' => $this->t('Slide-Skew'),
+              'lg-slide-skew-rev' => $this->t('Slide-Skew-Rev'),
+              'lg-slide-skew-cross' => $this->t('Slide-Skew-Cross'),
+              'lg-slide-skew-cross-rev' => $this->t('Slide-Skew-Cross-Rev'),
+              'lg-slide-skew-ver' => $this->t('Slide-Skew-Ver'),
+              'lg-slide-skew-ver-rev' => $this->t('Slide-Skew-Ver-Rev'),
+              'lg-slide-skew-ver-cross' => $this->t('Slide-Skew-Ver-Cross'),
+              'lg-slide-skew-ver-cross-rev' => $this->t('Slide-Skew-Ver-Cross-Rev'),
+              'lg-lollipop' => $this->t('Lollipop'),
+              'lg-lollipop-rev' => $this->t('Lollipop-Rev'),
+              'lg-rotate' => $this->t('Rotate'),
+              'lg-rotate-rev' => $this->t('Rotate-Rev'),
+              'lg-tube' => $this->t('Tube'),
             ],
             '#access' => TRUE,
           ],
@@ -346,7 +374,7 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
             '#title' => $this->t('Show maximize icon'),
             '#description' => $this->t('Show the maximize icon in the gallery.'),
             '#access' => FALSE,
-             /* Don't use this option!!!
+            /* Don't use this option!!!
             Problem with some drupal elements that stays on the screen
             when enabled, unable to reopen the gallery after closing it
             */
@@ -489,7 +517,7 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
               '#access' => TRUE,
             ],
             'thumbHeight' => [
-              '#type' => 'number',
+              '#type' => 'string',
               '#title' => $this->t('Thumbnail height'),
               '#description' => $this->t('Height of the thumbnails in pixels.'),
               '#access' => FALSE,
@@ -571,6 +599,7 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
                   '#type' => 'checkbox',
                   '#title' => $this->t('Show controls'),
                   '#description' => $this->t('Show video controls.'),
+                  '#access' => FALSE
                 ],
               ],
             ],
@@ -765,18 +794,18 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
     foreach ($plugin_definitions as $plugin_key => $plugin_data) {
       $config = $plugin_config[$plugin_key] ?? [];
 
-if ($type !== 'core') {
+      if ($type !== 'core') {
         // If the plugin is not the core, we need to add a details container
         // to group the plugin settings.
-      $form[$plugin_key] = [
-        '#type' => 'details',
-        '#title' => $plugin_data['label'] ?? ucfirst($plugin_key),
-        '#description' => $plugin_data['description'] ?? '',
-        '#open' => $plugin_data['open'] ?? FALSE,
-        '#tree' => TRUE,
-        '#parents' => array_merge($parents, [$plugin_key]),
-      ];
-    }
+        $form[$plugin_key] = [
+          '#type' => 'details',
+          '#title' => $plugin_data['label'] ?? ucfirst($plugin_key),
+          '#description' => $plugin_data['description'] ?? '',
+          '#open' => $plugin_data['open'] ?? FALSE,
+          '#tree' => TRUE,
+          '#parents' => array_merge($parents, [$plugin_key]),
+        ];
+      }
       // if this plugin is activable, add a checkbox
       // If the plugin has an 'activable' key, it means it can be enabled/disabled.
       if (!empty($plugin_data['activable'])) {

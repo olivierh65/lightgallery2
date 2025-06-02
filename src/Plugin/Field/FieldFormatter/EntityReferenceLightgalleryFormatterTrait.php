@@ -58,13 +58,10 @@ trait EntityReferenceLightgalleryFormatterTrait {
     $build = [];
     $build['#theme'] = 'lightgallery__' . str_replace('_lightgallery_', '_', $this->getBaseId()) . '__' . $entity->getEntityTypeId() . '__' . $this->fieldDefinition->getName();
     $build['#inline'] = $this->isInline();
-    $build['#settings'] = $this->getLightgallerySettings();
+    $build['#settings'] = $this->getGeneralSettings();
+    $build['#settings'] += $this->getLightgallerySettings();
     $build['#settings'] += [
-      'download' => FALSE,
-      'counter' => FALSE,
-      'getCaptionFromTitleOrAlt' => FALSE,
       'galleryId' => Html::getUniqueId('lightgallery-' . $id_suffix),
-      'hash' => FALSE,
     ];
 
     if ($build['#inline']) {
@@ -97,6 +94,79 @@ trait EntityReferenceLightgalleryFormatterTrait {
    *   True if the gallery should be inline.
    */
   abstract protected function isInline(): bool;
+
+    /**
+   * Builds and returns the LightGallery settings array.
+   *
+   * This method compiles the configuration settings for the LightGallery plugin,
+   * including core parameters and enabled plugin parameters. It ensures that only
+   * accessible and non-empty settings are included. Plugin parameters are flattened
+   * into the top-level settings array with underscore-separated keys. Additionally,
+   * the method attaches the necessary JavaScript libraries for each enabled plugin.
+   *
+   * @return array
+   *   The assembled settings array for LightGallery, including core settings,
+   *   enabled plugins, their parameters, and attached libraries.
+   */
+  private function getGeneralSettings(): array {
+
+    // Add the core settings from the configuration.
+    $core_settings_def = $this->getLightGalleryPluginDefinitions()['core']['params'];
+    $core_settings = $this->getSetting('lightgallery_settings')['core']['params'] ?? [];
+    foreach ($core_settings as $key => $value) {
+      if (isset($core_settings_def[$key]['#access']) && $core_settings_def[$key]['#access'] === FALSE) {
+        // Skip settings that are not accessible.
+        continue;
+      }
+      // Adds a non-empty value to the settings array.
+      if (! empty($value)) {
+        $settings[$key] = $value;
+      }
+    }
+
+
+    // Add enabled plugins, their parameters and javascript libraries.
+    $plugins_library = $this->getPluginsLibrary();
+    $plugins_settings_def = $this->getLightGalleryPluginDefinitions()['plugins'];
+    $plugins = [];
+    $settings['plugins'] = [];
+    $plugin_settings = $this->getSetting('lightgallery_settings')['plugins'] ?? [];
+    foreach ($plugin_settings as $plugin_id => $plugin_config) {
+      if (!empty($plugin_config['enabled'])) {
+        $plugins[] = $plugin_id;
+        $settings['plugins'][] = $plugins_library[$plugin_id];
+        // Flatten nested plugin params into $settings at the top level.
+        $params = $plugin_config['params'] ?? [];
+        $iterator = new \RecursiveIteratorIterator(
+          new \RecursiveArrayIterator($params),
+          \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($iterator as $key => $value) {
+          // Build the full key path using underscores.
+          $path = [];
+          foreach (range(0, $iterator->getDepth()) as $depth) {
+            $path[] = $iterator->getSubIterator($depth)->key();
+          }
+          $flat_key = implode('_', array_filter($path, 'strlen'));
+          // Check access if defined.
+          $def = $plugins_settings_def[$plugin_id]['params'];
+          foreach ($path as $segment) {
+            if (isset($def[$segment])) {
+              $def = $def[$segment];
+            }
+          }
+          if (isset($def['#access']) && $def['#access'] === FALSE) {
+            continue;
+          }
+          if (!is_array($value) && !empty($value)) {
+            $settings[$flat_key] = $value;
+          }
+        }
+        $settings[$plugin_id] = true;
+      }
+    }
+    return $settings;
+  }
 
   /**
    * Get the lightGallery settings.

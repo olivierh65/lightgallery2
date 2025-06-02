@@ -125,7 +125,7 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary(): array {
-    
+
     # \Drupal::logger('lightgallery - settingsSummary')->notice('<pre>' . print_r($this->getSettings(), TRUE) . '</pre>');
 
     $summary = $this->traitSettingsSummary();
@@ -249,9 +249,21 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
       case 'video_file':
         /** @var \Drupal\file\FileInterface $file */
         $file = $items->entity;
-        $attributes['data-video'] = '{"source": [{"src":"' . 
-              $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '", "type": "video/mp4"}], "attributes": {"preload": false, "controls": true}}';
+        $attributes['data-video1'] = '{"source": [{"src":"' .
+              $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '", "type": "video/mp4"}],
+              "attributes": {"preload": false, "controls": true}}';
         // $attributes['data-poster'] = $this->getImageUrl($thumbnail, $this->getSetting('gallery_image_style'));
+        $attributes['data-video'] = '{"source": [{"src":"' .
+          $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '",
+              "type": "' . $file->getMimeType() . '"}],
+              "attributes": {
+                "preload": "' . (empty($video_attributes['preload']) ? 'false' : 'true') . '",
+                "loop": ' . (empty($video_attributes['loop']) ? 'false' : 'true') . ',
+                "muted": ' . (empty($video_attributes['muted']) ? 'false' : 'true') . ',
+                "autoplay": ' . (empty($video_attributes['autoplay']) ? 'false' : 'true') . ',
+                "controls": ' . (empty($video_attributes['controls']) ? 'false' : 'true') . '
+              }
+            }';
         break;
     }
 

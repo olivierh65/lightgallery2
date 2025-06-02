@@ -17,6 +17,7 @@ lightgallery:
   css:
     component:
       /libraries/lightGallery/dist/css/lightgallery.css: { }
+      /libraries/lightGallery/dist/css/lg-transitions.css: { }
       css/lightgallery.css: { }
 
 lightgallery-autoplay:

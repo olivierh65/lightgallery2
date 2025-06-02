@@ -10,7 +10,7 @@ lightgallery.settings:
           type: mapping
           label: Core parameters
           mapping:
-            license_key:
+            licenseKey :
               type: string
               label: License key
               constraints:

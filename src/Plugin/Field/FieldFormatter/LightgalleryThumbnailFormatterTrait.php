@@ -36,6 +36,13 @@ trait LightgalleryThumbnailFormatterTrait {
       'thumbnail_loading' => 'lazy',
       'gallery_image_style' => NULL,
       'custom_settings' => [],
+      'video_attributes' => [
+        'preload' => FALSE,
+        'controls' => 'controls',
+        'autoplay' => FALSE,
+        'loop' => FALSE,
+        'muted' => FALSE,
+      ],
     ] + parent::defaultSettings();
     $settings['lightgallery_settings']['core'] = $config->get('core') ?? [];
     $settings['lightgallery_settings']['plugins'] = $config->get('plugins') ?? [];
@@ -137,6 +144,13 @@ trait LightgalleryThumbnailFormatterTrait {
       '#title' => $this->t('Thumbnails'),
       '#open' => TRUE,
       '#parents' => $parents,
+      '#states' => [
+        'visible' => [
+          [
+            ':input[name="fields[' . $this->fieldDefinition->getName() . '][settings_edit_form][settings][lightgallery_settings][plugins][thumbnail][enabled]"]' => ['checked' => TRUE],
+          ],
+        ],
+      ],
     ];
 
     $default = $this->getSetting('thumbnail_image_style');
@@ -162,6 +176,35 @@ trait LightgalleryThumbnailFormatterTrait {
       ],
       '#default_value' => $this->getSetting('thumbnail_loading'),
       '#required' => TRUE,
+    ];
+
+    $form['video'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Video player'),
+      '#description' => $this->t('Configure the video player settings.'),
+      '#open' => TRUE,
+      '#parents' => $parents,
+      '#states' => [
+        'visible' => [
+          // Show only if the video plugin is enabled.
+          [
+            ':input[name="fields[' . $this->fieldDefinition->getName() . '][settings_edit_form][settings][lightgallery_settings][plugins][video][enabled]"]' => ['checked' => TRUE],
+          ],
+        ],
+      ],
+    ];
+    $form['video']['video_attributes'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Video attributes'),
+      '#description' => $this->t('Select the attributes to add to the video element.'),
+      '#options' => [
+        'preload' => $this->t('Preload'),
+        'controls' => $this->t('Controls'),
+        'autoplay' => $this->t('Autoplay'),
+        'loop' => $this->t('Loop'),
+        'muted' => $this->t('Muted'),
+      ],
+      '#default_value' => $this->getSetting('video_attributes') ?? [],
     ];
 
     $form['advanced'] = [
@@ -329,45 +372,7 @@ trait LightgalleryThumbnailFormatterTrait {
 
     $settings = $this->getSetting('custom_settings');
 
-    // Add the core settings from the configuration.
-    $core_settings_def = $this->getLightGalleryPluginDefinitions()['core']['params'];
-    $core_settings = $this->getSetting('lightgallery_settings')['core']['params'] ?? [];
-    foreach ($core_settings as $key => $value) {
-      if (isset($core_settings_def[$key]['#access']) && $core_settings_def[$key]['#access'] === FALSE) {
-        // Skip settings that are not accessible.
-        continue;
-      }
-      // Adds a non-empty value to the settings array.
-      if (! empty($value)) {
-        $settings[$key] = $value;
-      }
-    }
-
-
-    // Add enabled plugins, their parameters and javascript libraries.
-    $plugins_library = $this->getPluginsLibrary();
-    $plugins_settings_def = $this->getLightGalleryPluginDefinitions()['plugins'];
-    $plugins = [];
-    $settings['plugins'] = [];
-    $plugin_settings = $this->getSetting('lightgallery_settings')['plugins'] ?? [];
-    foreach ($plugin_settings as $plugin_id => $plugin_config) {
-      if (!empty($plugin_config['enabled'])) {
-        $plugins[] = $plugin_id;
-        $settings['plugins'][] = $plugins_library[$plugin_id];
-        $settings['#attached']['library'][] = 'lightgallery/lightgallery-' . $plugins_library[$plugin_id];
-        foreach ($plugin_config['params'] ?? [] as $key => $value) {
-          if (isset($plugins_settings_def[$plugin_id]['params'][$key]['#access']) && $plugins_settings_def[$plugin_id]['params'][$key]['#access'] === FALSE) {
-            // Skip settings that are not accessible.
-            continue;
-          }
-          if (!empty($value)) {
-            $settings[$key] = $value;
-          }
-        }
-        $settings[$plugin_id] = true;
-      }
-    }
-
+    // force thumbnail plugin if the field has multiple values
     $settings += [
       'thumbnail' => $this->fieldDefinition->getFieldStorageDefinition()->getCardinality() !== 1,
     ];
