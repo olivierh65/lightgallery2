@@ -133,3 +133,21 @@ lightgallery-zoom:
       /libraries/lightGallery/dist/css/lg-zoom.css: { }
   dependencies:
     - lightgallery/lightgallery
+
+justified_gallery:
+  version: 1.x
+  js:
+    /libraries/Justified-Gallery/dist/js/jquery.justifiedGallery.min.js: { minified: true }
+  css:
+    theme:
+      /libraries/Justified-Gallery/dist/css/justifiedGallery.min.css: { minified: true }
+  dependencies:
+    - core/jquery
+
+init_view:
+  js:
+    js/album-justified-gallery.js: { }
+  dependencies:
+    - core/once
+    - core/drupal
+    - lightgallery/lightgallery

@@ -1,0 +1,42 @@
+<h1>
+	Album Gallery
+</h1>
+{# templates/views-view-style--album-justified-gallery.html.twig #}
+{# This template is used to render a justified gallery of album items. #}
+
+{# {{ dump() }} #}
+
+{% set rows = rows|default([]) %}
+
+{# Ensure that the rows variable is an array #}
+{% if not rows is iterable %}
+	{% set rows = [] %}
+{% endif %}
+
+<div{{ attributes.addClass(classes) }}>
+  <div class="albums-gallery">
+    {% for item in rows %}
+      <div class="album-block">
+        <a href="#" class="album-cover" data-album-id="{{ item.id }}">
+          <img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" width="300" height="200">
+        </a>
+        <div id="{{ item.id }}" class="lightgallery-album" style="display:none;">
+          {% for media_url in item.media_urls %}
+            <a href="{{ media_url }}">
+              <img src="{{ media_url }}" alt="">
+            </a>
+          {% endfor %}
+        </div>
+        <div class="caption">
+          <h3>{{ item.title }}</h3>
+          {% if item.author %}
+            <div class="author">{{ item.author }}</div>
+          {% endif %}
+          {% if item.description %}
+            <p>{{ item.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

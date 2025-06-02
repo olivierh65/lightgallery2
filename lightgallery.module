@@ -16,6 +16,16 @@ function lightgallery_theme(array $existing, string $type, string $theme, string
     'lightgallery' => [
       'variables' => ['items' => [], 'inline' => FALSE, 'settings' => [], 'init' => TRUE],
     ],
+    'album_justified_gallery' => [
+      'variables' => [
+        'view' => NULL,
+        'options' => [],
+        'rows' => [],
+        'settings' => [],
+        'init' => TRUE
+      ],
+      'template' => 'album-justified-gallery',
+    ],
   ];
 }
 
