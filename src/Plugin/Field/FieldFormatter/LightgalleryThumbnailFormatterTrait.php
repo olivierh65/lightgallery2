@@ -301,7 +301,7 @@ trait LightgalleryThumbnailFormatterTrait {
     if (is_array($value)) {
       $form_state->setValue($element['#parents'], $value);
     } else {
-      $form_state->setError($element, t('The custom settings are not a valid JSON object.'));
+      $form_state->setError($element, 'The custom settings are not a valid JSON object.');
     }
   }
 

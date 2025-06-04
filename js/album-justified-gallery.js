@@ -2,21 +2,44 @@
   Drupal.behaviors.lightgalleryAlbums = {
     attach: function (context, settings) {
       console.log("lightgalleryAlbums behavior attached");
+      const justifiedGalleryOptions = drupalSettings.settings
+        ?.justifiedGallery || {
+        rowHeight: 200,
+        maxRowsCount: 0,
+        border: -1,
+        captions: true,
+        margins: 5,
+        lastRow: "nojustify",
+      };
+      // Force captions à être un booléen
+      if (typeof justifiedGalleryOptions.captions !== "undefined") {
+        justifiedGalleryOptions.captions = !!justifiedGalleryOptions.captions;
+      }
+
+      $("#albums-gallery").justifiedGallery(justifiedGalleryOptions);
       $(once("lg-album", ".album-cover", context)).on("click", function (e) {
         e.preventDefault();
         var albumId = $(this).data("album-id");
         var $album = $("#" + albumId);
 
         // Récupère les settings spécifiques à cet album
-        var albumSettings = drupalSettings.lightgallery?.albums?.[albumId] || {};
+        var albumSettings =
+          drupalSettings.lightgallery?.albums?.[albumId] || {};
 
         if ($album.length && typeof window.lightGallery === "function") {
           if (!$album.data("lightGallery")) {
             // Initialisation native
+            const plugins = [];
+            (albumSettings.plugins || []).forEach(function (name) {
+              if (window[name]) {
+                plugins.push(window[name]);
+              }
+            });
+
             const instance = window.lightGallery($album[0], {
+              ...albumSettings,
               selector: "a",
-              plugins: drupalSettings.settings?.lightgallery?.["plugins"] || [],
-              ...albumSettings
+              plugins: plugins,
               // autres options...
             });
             $album.data("lightGallery", instance);

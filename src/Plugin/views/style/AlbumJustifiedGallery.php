@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Xss;
 use Drupal\Component\Utility\Html;
+use Drupal\lightgallery\Traits\LightGallerySettingsTrait;
 
 
 /**
@@ -25,6 +26,7 @@ use Drupal\Component\Utility\Html;
  * )
  */
 class AlbumJustifiedGallery extends StylePluginBase {
+    use LightGallerySettingsTrait;
 
     protected FileUrlGeneratorInterface $fileUrlGenerator;
 
@@ -83,6 +85,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
             $field_options[$field_name] = $handler->adminLabel();
         }
 
+
         // Champ pour l'image
         $form['image_field'] = [
             '#type' => 'select',
@@ -96,40 +99,31 @@ class AlbumJustifiedGallery extends StylePluginBase {
         $form['title_field'] = [
             '#type' => 'select',
             '#title' => $this->t('Title field'),
-            '#options' => $field_options,
+            '#options' => ['' => $this->t('- None -')] + $field_options,
             '#default_value' => $this->options['title_field'],
-            '#required' => TRUE,
+            '#required' => FALSE,
         ];
 
         // Champ pour l'auteur
         $form['author_field'] = [
             '#type' => 'select',
             '#title' => $this->t('Author field'),
-            '#options' => $field_options,
+            '#options' => ['' => $this->t('- None -')] + $field_options,
             '#default_value' => $this->options['author_field'],
         ];
 
-        // Champ pour l'URL
-        $form['url_field'] = [
-            '#type' => 'select',
-            '#title' => $this->t('URL field'),
-            '#options' => $field_options,
-            '#default_value' => $this->options['url_field'],
-            '#description' => $this->t('Typically the node URL field'),
-        ];
-
-        // Options Justified Gallery
-        $form['row_height'] = [
+        //  Options Justified Gallery
+        $form['rowHeight'] = [
             '#type' => 'number',
             '#title' => $this->t('Row height (px)'),
-            '#default_value' => $this->options['row_height'],
+            '#default_value' => $this->options['rowHeight'],
         ];
 
-        $form['row_height'] = [
+        $form['maxRowsCount'] = [
             '#type' => 'number',
-            '#title' => $this->t('Row height'),
-            '#default_value' => $this->options['row_height'],
-            '#description' => $this->t('Target height for each row in pixels.'),
+            '#title' => $this->t('Max rows count'),
+            '#default_value' => $this->options['maxRowsCount'] ?? 0,
+            '#description' => $this->t('Maximum number of rows to display. Set to 0 for no limit.'),
         ];
 
         $form['margins'] = [
@@ -138,16 +132,30 @@ class AlbumJustifiedGallery extends StylePluginBase {
             '#default_value' => $this->options['margins'],
             '#description' => $this->t('Margin between items in pixels.'),
         ];
+        $form['border'] = [
+            '#type' => 'number',
+            '#title' => $this->t('Border'),
+            '#default_value' => $this->options['border'] ?? -1,
+            '#description' => $this->t('Border around each item in pixels.'),
+        ];
 
-        $form['last_row'] = [
+        $form['lastRow'] = [
             '#type' => 'select',
             '#title' => $this->t('Last row behavior'),
             '#options' => [
                 'justify' => $this->t('Justify'),
                 'nojustify' => $this->t('No justify'),
                 'hide' => $this->t('Hide'),
+                'center' => $this->t('Center'),
+                'right' => $this->t('Right'),
             ],
             '#default_value' => $this->options['last_row'],
+        ];
+        $form['captions'] = [
+            '#type' => 'checkbox',
+            '#title' => $this->t('Display captions'),
+            '#default_value' => $this->options['captions'] ?? TRUE,
+            '#description' => $this->t('Display captions for images.'),
         ];
     }
 
@@ -163,7 +171,6 @@ class AlbumJustifiedGallery extends StylePluginBase {
             '#rows' => [],
             '#options' => $this->options,
             '#attributes' => [
-                'id' => 'lightgallery-' . $id,
                 'class' => ['album-justified-gallery', 'lightgallery-init'],
             ],
             '#attached' => [
@@ -175,14 +182,16 @@ class AlbumJustifiedGallery extends StylePluginBase {
                 'drupalSettings' => [
                     'settings' => [
                         'lightgallery' => [
-                            'lightgallery-' . $id => [
-                                'inline' => TRUE,
-                                'plugins' => ['lgJustifiedGallery'],
-                                'galleryId' => $id,
-                            ],
-                            'rowHeight' => $this->options['row_height'],
+                            'inline' => false,
+                            'galleryId' => $id,
+                        ],
+                        'justifiedGallery' => [
+                            'rowHeight' => $this->options['rowHeight'],
+                            'maxRowsCount' => $this->options['maxRowsCount'] ?? 0,
+                            'border' => $this->options['border'] ?? -1,
+                            'captions' => $this->options['captions'] ?? TRUE,
                             'margins' => $this->options['margins'],
-                            'lastRow' => $this->options['last_row'],
+                            'lastRow' => $this->options['lastRow'],
                         ],
                     ],
                 ],
@@ -192,17 +201,17 @@ class AlbumJustifiedGallery extends StylePluginBase {
         foreach ($this->view->result as $index => $row) {
             $this->view->row_index = $index;
 
-            // Image de couverture
+            // Get first media as presentation image
             $image_url = $this->getMediaImageUrl($row, $this->options['image_field']);
 
-            // Champs texte
+            // Text fields
             $title = $this->getFieldValue($index, $this->options['title_field']);
             $author = !empty($this->options['author_field']) ? $this->getFieldValue($index, $this->options['author_field']) : '';
             $description = !empty($this->options['description_field']) ? $this->getFieldValue($index, $this->options['description_field']) : '';
             $url = Url::fromRoute('entity.node.canonical', ['node' => $row->nid])->toString();
 
-            // Récupère tous les médias de l'album (à adapter selon ta structure)
-            $media_urls = [];
+            // Get all media items associated with the row's entity
+            $medias = [];
             if (
                 isset($row->_entity)
                 && $row->_entity instanceof \Drupal\Core\Entity\EntityInterface
@@ -210,34 +219,62 @@ class AlbumJustifiedGallery extends StylePluginBase {
             ) {
                 foreach ($row->_entity->get($this->options['image_field']) as $media_item) {
                     $media = $media_item->entity;
-                    // Pour les images
-                    if ($media->hasField('field_media_image') && !$media->get('field_media_image')->isEmpty()) {
-                        $file = $media->get('field_media_image')->entity;
-                        if ($file instanceof \Drupal\file\FileInterface) {
-                            $media_urls[] = $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
-                        }
-                    }
-                    // Pour les vidéos
-                    elseif ($media->hasField('field_media_video') && !$media->get('field_media_video')->isEmpty()) {
-                        $file = $media->get('field_media_video')->entity;
-                        if ($file instanceof \Drupal\file\FileInterface) {
-                            $media_urls[] = $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
-                        }
+                    switch ($media->getSource()->getPluginId()) {
+                        case 'image':
+                            // Image media type
+                            $file = $media->get('field_media_image')->entity;
+                            if ($file instanceof \Drupal\file\FileInterface) {
+
+                                $medias[] = [
+                                    'url' => $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()),
+                                    'mime_type' => $file->getMimeType(),
+                                ];
+                            }
+                            break;
+                        case 'video_file':
+                            // Video file media type
+                            $file = $media->get('field_media_video_file')->entity;
+                            $thumbnail = $media->get('thumbnail')->entity;
+                            if ($file instanceof \Drupal\file\FileInterface) {
+                                $medias[] = [
+                                    'url' => $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()),
+                                    'mime_type' => $file->getMimeType(),
+                                    'thumbnail' => $thumbnail ? $this->fileUrlGenerator->generateAbsoluteString($thumbnail->getFileUri()) : '',
+                                ];
+                            }
+                            break;
+                        //TODO: Add support for other media types if needed
+                        default:
+                            // Unknown media type, log a warning
+                            \Drupal::logger('album_justified_gallery')->warning('Unsupported media type: @type', ['@type' => $media->getSource()->getPluginId()]);
+                            break;
                     }
                 }
             }
 
             // retrieve display settings for the image field to get settings
-            $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', $row->_entity->bundle(),'default');
+            // use the default display
+            // TODO: allow selecting a specific display mode ?
+            $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', $row->_entity->bundle(), 'default');
             if ($display && $display->getComponent($this->options['image_field'])) {
                 $node_settings = $display->getComponent($this->options['image_field'])['settings'];
-            }
-            else {
+            } else {
                 $node_settings = [];
             }
 
             $album_id = 'album-item-' . rand();
-            $build['#attached']['drupalSettings']['lightgallery']['albums'][$album_id] = $node_settings;
+            // Build the settings for the album
+            $build['#attached']['drupalSettings']['lightgallery']['albums'][$album_id] = static::getGeneralSettings($node_settings);
+            //Build plugins list and attach libraries
+            $plugins_mapping = static::getPluginsLibrary();
+            $build['#attached']['drupalSettings']['lightgallery']['albums'][$album_id]['plugins'] = [];
+            foreach ($node_settings['lightgallery_settings']['plugins'] ?? [] as $plugin_name => $plugin) {
+                if (isset($plugin['enabled']) && $plugin['enabled'] == false) {
+                    continue; // Skip disabled plugins
+                }
+                $build['#attached']['library'][] = 'lightgallery/lightgallery-' . $plugin_name ?? $plugin_name;
+                $build['#attached']['drupalSettings']['lightgallery']['albums'][$album_id]['plugins'][] = $plugins_mapping[$plugin_name] ?? $plugin_name;
+            }
 
             $build['#rows'][] = [
                 'image_url' => $image_url,
@@ -245,13 +282,25 @@ class AlbumJustifiedGallery extends StylePluginBase {
                 'author' => $author,
                 'description' => $description,
                 'url' => $url,
-                'media_urls' => $media_urls,
+                'medias' => $medias,
                 'id' => $album_id,
             ];
         }
 
         unset($this->view->row_index);
         return $build;
+    }
+
+    private function buildJSONSettings($node_settings) {
+        $settings = [];
+        foreach ($node_settings as $key => $value) {
+            if (is_array($value)) {
+                $settings[$key] = json_encode($value);
+            } else {
+                $settings[$key] = PlainTextOutput::renderFromHtml(Xss::filter($value));
+            }
+        }
+        return $settings;
     }
 
 
@@ -276,4 +325,5 @@ class AlbumJustifiedGallery extends StylePluginBase {
 
         return '';
     }
+
 }

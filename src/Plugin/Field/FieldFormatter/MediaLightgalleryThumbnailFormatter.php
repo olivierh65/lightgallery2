@@ -249,10 +249,6 @@ class MediaLightgalleryThumbnailFormatter extends EntityReferenceFormatterBase {
       case 'video_file':
         /** @var \Drupal\file\FileInterface $file */
         $file = $items->entity;
-        $attributes['data-video1'] = '{"source": [{"src":"' .
-              $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '", "type": "video/mp4"}],
-              "attributes": {"preload": false, "controls": true}}';
-        // $attributes['data-poster'] = $this->getImageUrl($thumbnail, $this->getSetting('gallery_image_style'));
         $attributes['data-video'] = '{"source": [{"src":"' .
           $this->getFileUrlGenerator()->generateAbsoluteString($file->getFileUri()) . '",
               "type": "' . $file->getMimeType() . '"}],

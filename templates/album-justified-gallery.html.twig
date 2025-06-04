@@ -13,30 +13,39 @@
 	{% set rows = [] %}
 {% endif %}
 
-<div{{ attributes.addClass(classes) }}>
-  <div class="albums-gallery">
-    {% for item in rows %}
-      <div class="album-block">
-        <a href="#" class="album-cover" data-album-id="{{ item.id }}">
-          <img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" width="300" height="200">
-        </a>
-        <div id="{{ item.id }}" class="lightgallery-album" style="display:none;">
-          {% for media_url in item.media_urls %}
-            <a href="{{ media_url }}">
-              <img src="{{ media_url }}" alt="">
-            </a>
-          {% endfor %}
-        </div>
-        <div class="caption">
-          <h3>{{ item.title }}</h3>
-          {% if item.author %}
-            <div class="author">{{ item.author }}</div>
-          {% endif %}
-          {% if item.description %}
-            <p>{{ item.description }}</p>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+<div{{attributes.addClass(classes)}}>
+	<div id="albums-gallery">
+		{% for item in rows %}
+			<div class="album-block">
+				<a href="#" class="album-cover" data-album-id="{{ item.id }}">
+					<img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" width="300" height="200">
+				</a>
+				<div id="{{ item.id }}" class="lightgallery-album" style="display:none;">
+					{% for media in item.medias %}
+						{% if media.mime_type starts with 'image/' %}
+							<a href="{{ media.url }}" class="lightgallery__item" data-sub-html="">
+								<img loading="lazy" src="{{ media.url }}" alt="">
+							</a>
+						{% elseif media.mime_type starts with 'video/' %}
+							<a class="lightgallery__item"
+                data-poster="{{ media.thumbnail|default('') }}"
+                data-video='{"source": [{"src":"{{ media.url }}","type":"{{ media.mime_type }}"}], "attributes": {"preload": false, "playsinline": true, "controls": true}}'
+                data-sub-html="">
+                <img loading="lazy" class="img-responsive" src="{{ media.thumbnail|default('') }}" alt=""/>
+                </a>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="caption">
+					<h3>{{ item.title }}</h3>
+					{% if item.author %}
+						<div class="author">{{ item.author }}</div>
+					{% endif %}
+					{% if item.description %}
+						<p>{{ item.description }}</p>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
 </div>
