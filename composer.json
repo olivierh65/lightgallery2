@@ -19,7 +19,21 @@
     },
     "require": {
         "bower-asset/lightgallery": "^2.8",
+        "bower-asset/justifiedGallery": "^3.8",
         "composer/installers": "^2.3",
         "oomphinc/composer-installers-extender": "^2.0"
+    },
+    "extra": {
+        "installer-types": [
+            "bower-asset"
+        ],
+        "installer-paths": {
+            "libraries/lightGallery": [
+                "bower-asset/lightgallery"
+            ],
+            "libraries/Justified-Gallery": [
+                "bower-asset/justifiedGallery"
+            ]
+        }
     }
 }

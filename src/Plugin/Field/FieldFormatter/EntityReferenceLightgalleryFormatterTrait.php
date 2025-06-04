@@ -18,7 +18,7 @@ use Drupal\lightgallery\Traits\LightGallerySettingsTrait;
  * @SuppressWarnings(PHPMD.LongClassNames)
  */
 trait EntityReferenceLightgalleryFormatterTrait {
-
+  use LightGallerySettingsTrait;
   /**
    * The image style options.
    *
@@ -59,8 +59,8 @@ trait EntityReferenceLightgalleryFormatterTrait {
     $build = [];
     $build['#theme'] = 'lightgallery__' . str_replace('_lightgallery_', '_', $this->getBaseId()) . '__' . $entity->getEntityTypeId() . '__' . $this->fieldDefinition->getName();
     $build['#inline'] = $this->isInline();
-    $build['#settings'] = LightGallerySettingsTrait::getGeneralSettings($this->getSettings());
-    $build['#settings'] += $this->getLightgallerySettings();
+    $build['#settings'] = static::getGeneralSettings($this->getSettings());
+    $build['#settings'] += static::getLightgallerySettings();
     $build['#settings'] += [
       'galleryId' => Html::getUniqueId('lightgallery-' . $id_suffix),
     ];

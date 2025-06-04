@@ -939,7 +939,7 @@ Also, toggle thumbnails button is not displayed if allowMediaOverlap is false'),
   public static function getGeneralSettings(array $all_settings): array {
 
     // Add the core settings from the configuration.
-    $core_settings_def = self::getLightGalleryPluginDefinitions()['core']['params'];
+    $core_settings_def = static::getLightGalleryPluginDefinitions()['core']['params'];
     $core_settings = $all_settings['lightgallery_settings']['core']['params'] ?? [];
     foreach ($core_settings as $key => $value) {
       if (isset($core_settings_def[$key]['#access']) && $core_settings_def[$key]['#access'] === FALSE) {
