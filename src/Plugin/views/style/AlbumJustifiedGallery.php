@@ -17,6 +17,8 @@ use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\field\EntityField;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
+use Drupal\image\Entity\ImageStyle;
+
 /**
  * Album Justified Gallery style plugin.
  *
@@ -73,6 +75,8 @@ class AlbumJustifiedGallery extends StylePluginBase {
         $options['author_field'] = ['default' => ''];
         $options['url_field'] = ['default' => ''];
 
+        $options['ThumbnailStyle'] = ['default' => ''];
+
         return $options;
     }
 
@@ -84,6 +88,22 @@ class AlbumJustifiedGallery extends StylePluginBase {
 
         list($fields_text, $fields_media, $fields_taxo) = $this->getTextAndMediaFields($this->view);
 
+        // Champ pour la description
+        $image_styles = ImageStyle::loadMultiple();
+        foreach ($image_styles as $style => $image_style) {
+            $fields_media[$image_style->id()] = $image_style->label();
+        }
+        $default_style = '';
+        if (isset($this->options['image_thumbnail_style']) && $this->options['image_thumbnail_style']) {
+            $default_style = $this->options['image_thumbnail_style'];
+        } elseif (isset($image_styles['medium'])) {
+            $default_style = 'medium';
+        } elseif (isset($image_styles['thumbnail'])) {
+            $default_style = 'thumbnail';
+        } elseif (!empty($image_styles)) {
+            $default_style = array_key_first($image_styles);
+        }
+        $this->options['image_thumbnail_style'] = $default_style;
 
         // Champ pour l'image
         $form['image_field'] = [
@@ -92,6 +112,14 @@ class AlbumJustifiedGallery extends StylePluginBase {
             '#options' => $fields_media,
             '#default_value' => $this->options['image_field'],
             '#required' => TRUE,
+        ];
+
+        $form['image_thumbnail_style'] = [
+            '#type' => 'select',
+            '#title' => $this->t('Thumbnail style'),
+            '#options' =>  $fields_media,
+            '#default_value' => $this->options['image_thumbnail_style'],
+            '#description' => $this->t('Select an image style to apply to the thumbnails.'),
         ];
 
         // Champ pour le titre
@@ -222,6 +250,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
                     switch ($media->getSource()->getPluginId()) {
                         case 'image':
                             // Image media type
+
                             $file = $media->get('field_media_image')->entity;
                             if ($file instanceof \Drupal\file\FileInterface) {
 
@@ -230,6 +259,8 @@ class AlbumJustifiedGallery extends StylePluginBase {
                                     'mime_type' => $file->getMimeType(),
                                     'alt' => $media->get('field_media_image')->first()->get('alt')->getValue() ?? '',
                                     'title' => $media->get('field_media_image')->first()->get('title')->getValue() ?? '',
+                                    'thumbnail' => ImageStyle::load($this->options['image_thumbnail_style'])->buildUrl($file->getFileUri())
+                                        ?? $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()),
                                 ];
                             }
                             break;

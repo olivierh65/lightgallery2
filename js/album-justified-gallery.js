@@ -5,11 +5,12 @@
       const justifiedGalleryOptions = drupalSettings.settings
         ?.justifiedGallery || {
         rowHeight: 200,
+        maxRowHeight: '200%',
         maxRowsCount: 0,
         border: -1,
         captions: true,
         margins: 5,
-        lastRow: "nojustify",
+        lastRow: "justify",
       };
       // Force captions à être un booléen
       if (typeof justifiedGalleryOptions.captions !== "undefined") {
@@ -40,6 +41,7 @@
               ...albumSettings,
               selector: "a",
               plugins: plugins,
+              subHtmlSelectorRelative: true,
               // autres options...
             });
             $album.data("lightGallery", instance);

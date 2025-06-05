@@ -15,16 +15,34 @@
         {% for item in rows %}
             <div class="album-block">
                 {% if item.medias is not empty %}
-                  <a href="#" class="album-cover" data-album-id="{{ item.id }}">
-                    <img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" width="300" height="200">
-                  </a>
+                  <a href="#" class="album-cover" data-album-id="{{ item.id }}" style="display: block;">
+    <span class="album-cover-title-top"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            padding: 0.3em 0.5em;
+            font-size: 0.8em;
+            font-weight: lighter;
+            text-align: center;
+            z-index: 2;
+            border-top-left-radius: 0.3em;
+            border-top-right-radius: 0.3em;
+            box-sizing: border-box;
+            display: block;
+          ">{{ item.title }}</span>
+    <img src="{{ item.image_url }}" alt="{{ item.alt }}" class="album-cover-img" loading="lazy"  style="display: block;">
+  </a>
                 {% else %}
                   <span
                     class="album-cover album-cover--disabled"
                     style="opacity: 0.5; cursor: not-allowed; position: relative;"
                     title="Aucun média dans cet album – {{ item.title }}"
                   >
-                    <img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" width="300" height="200">
+                    <img src="{{ item.image_url }}" alt="{{ item.title }}" class="album-cover-img" loading="lazy" >
                     <span
                       class="album-cover-title-overlay"
                       style="
@@ -47,18 +65,35 @@
                 <div id="{{ item.id }}" class="lightgallery-album" style="display:none;">
                     {% for media in item.medias %}
                         {% if media.mime_type starts with 'image/' %}
-                            <a href="{{ media.url }}" class="lightgallery__item" alt="{{ media.alt|default('') }}"
-                              title="{{ media.title|default('') }}">
-                                <img loading="lazy" src="{{ media.url }}" >
+                            <a href="{{ media.url }}" class="lightgallery__item" data-sub-html=".lightgallery_caption">
+                                <img loading="lazy" src="{{ media.thumbnail }}" >
+                                <div class="lightgallery_caption">
+                                    <h4>{{ media.title|default('') }}</h4>
+                                    {% if media.alt %}
+                                        <p>{{ media.alt }}</p>
+                                    {% endif %}
+                                    {% if media.description %}
+                                        <p>{{ media.description }}</p>
+                                    {% endif %}
+                                </div>
                             </a>
                         {% elseif media.mime_type starts with 'video/' %}
-                            <a class="lightgallery__item"
+                            <a class="lightgallery__item" data-sub-html=".lightgallery_caption"
                 data-poster="{{ media.thumbnail|default('') }}"
                 data-video='{"source": [{"src":"{{ media.url }}","type":"{{ media.mime_type }}"}], "attributes": {"preload": false, "playsinline": true, "controls": true}}' }}"
                 title="{{ media.title|default('') }}">
                 {% if media.thumbnail %}
                   <img loading="lazy" class="img-responsive" src="{{ media.thumbnail|default('') }}"/>
                 {% endif %}
+                <div class="lightgallery_caption">
+                                    <h4>{{ media.title|default('') }}</h4>
+                                    {% if media.alt %}
+                                        <p>{{ media.alt }}</p>
+                                    {% endif %}
+                                    {% if media.description %}
+                                        <p>{{ media.description }}</p>
+                                    {% endif %}
+                                </div>
                 </a>
                         {% endif %}
                     {% endfor %}
