@@ -438,6 +438,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
             }
         }
 
+        $taxo_fields = implode(', ', $taxo_fields);
         return [$text_fields, $media_fields, $taxo_fields];
     }
 }
