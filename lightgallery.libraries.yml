@@ -13,134 +13,134 @@ init:
 
 lightgallery:
   js:
-    /libraries/lightGallery/dist/lightgallery.min.js: { minified: true }
+    /libraries/lightgallery/dist/lightgallery.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lightgallery.css: { }
-      /libraries/lightGallery/dist/css/lg-transitions.css: { }
+      /libraries/lightgallery/dist/css/lightgallery.css: { }
+      /libraries/lightgallery/dist/css/lg-transitions.css: { }
       css/lightgallery.css: { }
 
 lightgallery-autoplay:
   js:
-    /libraries/lightGallery/dist/plugins/autoplay/lg-autoplay.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/autoplay/lg-autoplay.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-autoplay.css: { }
+      /libraries/lightgallery/dist/css/lg-autoplay.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-comment:
   js:
-    /libraries/lightGallery/dist/plugins/comment/lg-comment.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/comment/lg-comment.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-comment.css: { }
+      /libraries/lightgallery/dist/css/lg-comment.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-fullscreen:
   js:
-    /libraries/lightGallery/dist/plugins/fullscreen/lg-fullscreen.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/fullscreen/lg-fullscreen.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-fullscreen.css: { }
+      /libraries/lightgallery/dist/css/lg-fullscreen.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-hash:
   js:
-    /libraries/lightGallery/dist/plugins/hash/lg-hash.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/hash/lg-hash.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-hash.css: { }
+      /libraries/lightgallery/dist/css/lg-hash.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-medium-zoom:
   js:
-    /libraries/lightGallery/dist/plugins/mediumZoom/lg-medium-zoom.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/mediumZoom/lg-medium-zoom.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-medium-zoom.css: { }
+      /libraries/lightgallery/dist/css/lg-medium-zoom.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-pager:
   js:
-    /libraries/lightGallery/dist/plugins/pager/lg-pager.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/pager/lg-pager.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-pager.css: { }
+      /libraries/lightgallery/dist/css/lg-pager.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-relative-caption:
   js:
-    /libraries/lightGallery/dist/plugins/relativeCaption/lg-relative-caption.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/relativeCaption/lg-relative-caption.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-relative-caption.css: { }
+      /libraries/lightgallery/dist/css/lg-relative-caption.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-rotate:
   js:
-    /libraries/lightGallery/dist/plugins/rotate/lg-rotate.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/rotate/lg-rotate.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-rotate.css: { }
+      /libraries/lightgallery/dist/css/lg-rotate.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-share:
   js:
-    /libraries/lightGallery/dist/plugins/share/lg-share.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/share/lg-share.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-share.css: { }
+      /libraries/lightgallery/dist/css/lg-share.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-thumbnail:
   js:
-    /libraries/lightGallery/dist/plugins/thumbnail/lg-thumbnail.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/thumbnail/lg-thumbnail.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-thumbnail.css: { }
+      /libraries/lightgallery/dist/css/lg-thumbnail.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-video:
   js:
-    /libraries/lightGallery/dist/plugins/video/lg-video.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/video/lg-video.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-video.css: { }
+      /libraries/lightgallery/dist/css/lg-video.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-vimeo-thumbnail:
   js:
-    /libraries/lightGallery/dist/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/vimeoThumbnail/lg-vimeo-thumbnail.min.js: { minified: true }
   dependencies:
     - lightgallery/lightgallery
 
 lightgallery-zoom:
   js:
-    /libraries/lightGallery/dist/plugins/zoom/lg-zoom.min.js: { minified: true }
+    /libraries/lightgallery/dist/plugins/zoom/lg-zoom.min.js: { minified: true }
   css:
     component:
-      /libraries/lightGallery/dist/css/lg-zoom.css: { }
+      /libraries/lightgallery/dist/css/lg-zoom.css: { }
   dependencies:
     - lightgallery/lightgallery
 
 justified_gallery:
   version: 1.x
   js:
-    /libraries/Justified-Gallery/dist/js/jquery.justifiedGallery.min.js: { minified: true }
+    /libraries/justifiedgallery/dist/js/jquery.justifiedGallery.min.js: { minified: true }
   css:
     theme:
-      /libraries/Justified-Gallery/dist/css/justifiedGallery.min.css: { minified: true }
+      /libraries/justifiedgallery/dist/css/justifiedGallery.min.css: { minified: true }
   dependencies:
     - core/jquery
 

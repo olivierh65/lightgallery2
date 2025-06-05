@@ -28,11 +28,11 @@
             "bower-asset"
         ],
         "installer-paths": {
-            "libraries/lightGallery": [
+            "libraries/lightgallery": [
                 "bower-asset/lightgallery"
             ],
-            "libraries/Justified-Gallery": [
-                "bower-asset/justifiedGallery"
+            "libraries/justifiedgallery": [
+                "bower-asset/justifiedgallery"
             ]
         }
     }

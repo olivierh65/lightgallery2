@@ -59,7 +59,7 @@ plugins:
       scale: 1
 
   thumbnail:
-    enabled: false
+    enabled: true
     params:
       alignThumbnails : 'middle'
       animateThumb : true
@@ -76,11 +76,11 @@ plugins:
       youTubeThumbSize : 1
 
   video:
-    enabled: false
+    enabled: true
     params:
-      autoplayFirstVideo : true
-      autoplayVideoOnSlide : false
-      gotoNextSlideOnVideoEnd : true
+      autoplayFirstVideo : false
+      autoplayVideoOnSlide : true
+      gotoNextSlideOnVideoEnd : false
       youTubePlayer :
         params:
           modestbranding: 1
@@ -94,7 +94,7 @@ plugins:
       customSlideName : true
 
   autoplay:
-    enabled: false
+    enabled: true
     params:
       appendAutoplayControlsTo : '.lg-toolbar'
       autoplayControls : true
@@ -116,5 +116,5 @@ plugins:
     enabled: false
 
   fullscreen:
-    enabled: false
+    enabled: true
 

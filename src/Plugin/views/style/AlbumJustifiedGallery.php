@@ -13,6 +13,9 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Component\Utility\Html;
 use Drupal\lightgallery\Traits\LightGallerySettingsTrait;
 
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\field\EntityField;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Album Justified Gallery style plugin.
@@ -61,9 +64,9 @@ class AlbumJustifiedGallery extends StylePluginBase {
      */
     protected function defineOptions() {
         $options = parent::defineOptions();
-        $options['row_height'] = ['default' => 200];
+        $options['rowHeight'] = ['default' => 200];
         $options['margins'] = ['default' => 10];
-        $options['last_row'] = ['default' => 'justify'];
+        $options['lastRow'] = ['default' => 'justify'];
 
         $options['image_field'] = ['default' => ''];
         $options['title_field'] = ['default' => ''];
@@ -79,18 +82,14 @@ class AlbumJustifiedGallery extends StylePluginBase {
     public function buildOptionsForm(&$form, FormStateInterface $form_state) {
         parent::buildOptionsForm($form, $form_state);
 
-        // Récupère la liste des champs disponibles
-        $field_options = [];
-        foreach ($this->displayHandler->getHandlers('field') as $field_name => $handler) {
-            $field_options[$field_name] = $handler->adminLabel();
-        }
+        list($fields_text, $fields_media, $fields_taxo) = $this->getTextAndMediaFields($this->view);
 
 
         // Champ pour l'image
         $form['image_field'] = [
             '#type' => 'select',
             '#title' => $this->t('Image field'),
-            '#options' => $field_options,
+            '#options' => $fields_media,
             '#default_value' => $this->options['image_field'],
             '#required' => TRUE,
         ];
@@ -99,7 +98,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
         $form['title_field'] = [
             '#type' => 'select',
             '#title' => $this->t('Title field'),
-            '#options' => ['' => $this->t('- None -')] + $field_options,
+            '#options' => ['' => $this->t('- None -')] + $fields_text,
             '#default_value' => $this->options['title_field'],
             '#required' => FALSE,
         ];
@@ -108,7 +107,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
         $form['author_field'] = [
             '#type' => 'select',
             '#title' => $this->t('Author field'),
-            '#options' => ['' => $this->t('- None -')] + $field_options,
+            '#options' => ['' => $this->t('- None -')] + $fields_taxo,
             '#default_value' => $this->options['author_field'],
         ];
 
@@ -149,7 +148,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
                 'center' => $this->t('Center'),
                 'right' => $this->t('Right'),
             ],
-            '#default_value' => $this->options['last_row'],
+            '#default_value' => $this->options['lastRow'],
         ];
         $form['captions'] = [
             '#type' => 'checkbox',
@@ -198,6 +197,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
             ],
         ];
 
+
         foreach ($this->view->result as $index => $row) {
             $this->view->row_index = $index;
 
@@ -205,7 +205,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
             $image_url = $this->getMediaImageUrl($row, $this->options['image_field']);
 
             // Text fields
-            $title = $this->getFieldValue($index, $this->options['title_field']);
+            $title = !empty($this->options['title_field']) ? $this->getFieldValue($index, $this->options['title_field']) : '';
             $author = !empty($this->options['author_field']) ? $this->getFieldValue($index, $this->options['author_field']) : '';
             $description = !empty($this->options['description_field']) ? $this->getFieldValue($index, $this->options['description_field']) : '';
             $url = Url::fromRoute('entity.node.canonical', ['node' => $row->nid])->toString();
@@ -228,6 +228,8 @@ class AlbumJustifiedGallery extends StylePluginBase {
                                 $medias[] = [
                                     'url' => $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()),
                                     'mime_type' => $file->getMimeType(),
+                                    'alt' => $media->get('field_media_image')->first()->get('alt')->getValue() ?? '',
+                                    'title' => $media->get('field_media_image')->first()->get('title')->getValue() ?? '',
                                 ];
                             }
                             break;
@@ -240,6 +242,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
                                     'url' => $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()),
                                     'mime_type' => $file->getMimeType(),
                                     'thumbnail' => $thumbnail ? $this->fileUrlGenerator->generateAbsoluteString($thumbnail->getFileUri()) : '',
+                                    'title' => $media->get('field_media_video_file')->first()->get('description')->getValue() ?? '',
                                 ];
                             }
                             break;
@@ -252,10 +255,8 @@ class AlbumJustifiedGallery extends StylePluginBase {
                 }
             }
 
-            // retrieve display settings for the image field to get settings
-            // use the default display
-            // TODO: allow selecting a specific display mode ?
-            $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', $row->_entity->bundle(), 'default');
+            $renderer = $this->view->display_handler->getOption('fields')[$this->options['image_field']]['settings']['view_mode'];
+            $display = \Drupal::service('entity_display.repository')->getViewDisplay('node', $row->_entity->bundle(), $renderer ?? 'default');
             if ($display && $display->getComponent($this->options['image_field'])) {
                 $node_settings = $display->getComponent($this->options['image_field'])['settings'];
             } else {
@@ -264,6 +265,7 @@ class AlbumJustifiedGallery extends StylePluginBase {
 
             $album_id = 'album-item-' . rand();
             // Build the settings for the album
+            // Should be the sames settings for all albums, as they use the same formatter/renderer
             $build['#attached']['drupalSettings']['lightgallery']['albums'][$album_id] = static::getGeneralSettings($node_settings);
             //Build plugins list and attach libraries
             $plugins_mapping = static::getPluginsLibrary();
@@ -316,7 +318,12 @@ class AlbumJustifiedGallery extends StylePluginBase {
             if ($media_item instanceof \Drupal\media\MediaInterface) {
                 if ($media_item->hasField('field_media_image') && !$media_item->get('field_media_image')->isEmpty()) {
                     $file = $media_item->get('field_media_image')->entity;
-                    return $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
+                    if ($file) {
+                        // Return the absolute URL of the file
+                        return $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
+                    } else {
+                        return \Drupal::request()->getSchemeAndHttpHost() . '/' . \Drupal::service('extension.list.module')->getPath('lightgallery') . '/images/Document_error.png';
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -326,4 +333,111 @@ class AlbumJustifiedGallery extends StylePluginBase {
         return '';
     }
 
+    public function validateOptionsForm(&$form, FormStateInterface $form_state) {
+        parent::validateOptionsForm($form, $form_state);
+
+        $image_field = $form_state->getValue(['style_options', 'image_field']);
+        $handlers = $this->displayHandler->getHandlers('field');
+
+        if (empty($image_field) || !isset($handlers[$image_field])) {
+            $form_state->setErrorByName('image_field', $this->t('You must select a valid image/media field.'));
+            return;
+        }
+
+        // Récupérer le type d'entité et le bundle depuis la vue
+        $entity_type = $this->view->storage->get('base_table'); // ex: 'node'
+        if ($entity_type === 'node_field_data') {
+            $entity_type = 'node';
+        } elseif ($entity_type === 'media_field_data') {
+            $entity_type = 'media';
+        }
+        $bundle = $this->view->display_handler->getOption('filters')['type']['value'] ?? NULL; // ex: 'article'
+        if (is_array($bundle)) {
+            $bundle = reset($bundle); // Prendre le premier bundle si c'est un tableau
+        }
+
+        // Charger la définition du champ
+        if ($entity_type && $bundle) {
+            $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $bundle);
+            if (isset($field_definitions[$image_field])) {
+                $field_def = $field_definitions[$image_field];
+                $type = $field_def->getType();
+                if (
+                    $type !== 'image' &&
+                    !($type === 'entity_reference' && $field_def->getSetting('target_type') === 'media')
+                ) {
+                    $form_state->setErrorByName('image_field', $this->t('The selected field must be an image or a media reference.'));
+                }
+            }
+        }
+    }
+
+    protected function getTextAndMediaFields(ViewExecutable $view) {
+        $text_fields = [];
+        $media_fields = [];
+        $taxo_fields = [];
+
+        // 1. Déterminer l'entité et le bundle
+        $base_table = $view->storage->get('base_table');
+        $entity_type_id = NULL;
+        $table_to_entity = [
+            'node_field_data' => 'node',
+            'media_field_data' => 'media',
+            'user_field_data' => 'user',
+            'taxonomy_term_field_data' => 'taxonomy_term',
+            // Ajoute d'autres cas si besoin
+        ];
+        if (isset($table_to_entity[$base_table])) {
+            $entity_type_id = $table_to_entity[$base_table];
+        } else {
+            // Fallback: recherche dans les définitions d'entité
+            foreach (\Drupal::entityTypeManager()->getDefinitions() as $id => $definition) {
+                if ($definition->getBaseTable() === $base_table) {
+                    $entity_type_id = $id;
+                    break;
+                }
+            }
+        }
+        if (!$entity_type_id) {
+            return [$text_fields, $media_fields, $taxo_fields];
+        }
+
+        // Récupérer le bundle (type de contenu)
+        $bundle = $view->display_handler->getOption('filters')['type']['value'] ?? NULL;
+        if (is_array($bundle)) {
+            $bundle = reset($bundle);
+        }
+        if (!$bundle) {
+            return [$text_fields, $media_fields, $taxo_fields];
+        }
+
+        // 2. Charger les définitions de champ pour ce bundle
+        $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $bundle);
+
+        // 3. Parcourir les handlers de champ de la vue
+        foreach ($view->display_handler->getHandlers('field') as $field_id => $handler) {
+            $field_name = $handler->field ?? NULL;
+            if ($field_name && isset($field_definitions[$field_name])) {
+                $field_def = $field_definitions[$field_name];
+                $type = $field_def->getType();
+
+                // 4. Tester le type du champ
+                if (in_array($type, ['string', 'text', 'text_long', 'text_with_summary'])) {
+                    $text_fields[$field_name] = (string)$field_def->getLabel();
+                } elseif (
+                    $type === 'entity_reference' &&
+                    $field_def->getSetting('target_type') === 'media'
+                ) {
+                    $media_fields[$field_name] = (string)$field_def->getLabel();
+                } elseif (
+                    $type === 'entity_reference' &&
+                    $field_def->getSetting('target_type') === 'taxonomy_term'
+                ) {
+                    $taxo_fields[$field_name] = (string)$field_def->getLabel();
+                }
+            }
+        }
+
+        return [$text_fields, $media_fields, $taxo_fields];
+    }
 }

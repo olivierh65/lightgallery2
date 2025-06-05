@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_theme().
@@ -29,6 +30,51 @@ function lightgallery_theme(array $existing, string $type, string $theme, string
     ],
   ];
 }
+
+
+
+/**
+ * Implements hook_requirements().
+ */
+function lightgallery_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'runtime') {
+    $libraries_path = DRUPAL_ROOT ;
+
+    $missing = [];
+
+    // Chemin absolu vers lightgallery.libraries.yml
+    $lib_file = DRUPAL_ROOT . '/modules/custom/lightgallery/lightgallery.libraries.yml';
+
+    if (file_exists($lib_file)) {
+      $libraries = Yaml::parseFile($lib_file);
+
+        if (!file_exists($libraries_path . '/' . reset(array_keys($libraries['lightgallery']['js'])))) {
+          $missing[] = reset(array_keys($libraries['lightgallery']['js']));
+        }
+
+        if (!file_exists($libraries_path . '/' . reset(array_keys($libraries['justified_gallery']['js'])))) {
+          $missing[] = reset(array_keys($libraries['justified_gallery']['js']));
+        }
+
+    }
+    else {
+      $missing[] = 'lightgallery.libraries.yml introuvable.';
+    }
+
+    $requirements['lightgallery_libraries'] = [
+      'title' => t('LightGallery external libraries'),
+      'value' => empty($missing) ? t('All libraries present.') : t('Missing: @list', ['@list' => implode(', ', $missing)]),
+      'severity' => empty($missing) ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+      'description' => t('Ensure the required JavaScript and CSS libraries are placed in the <code>/libraries</code> directory.'),
+    ];
+  }
+
+  return $requirements;
+}
+
+
 
 /**
  * Default preprocess function for the lightgallery theme hook.
