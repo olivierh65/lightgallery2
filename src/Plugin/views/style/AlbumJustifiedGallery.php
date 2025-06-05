@@ -438,7 +438,71 @@ class AlbumJustifiedGallery extends StylePluginBase {
             }
         }
 
-        $taxo_fields = implode(', ', $taxo_fields);
         return [$text_fields, $media_fields, $taxo_fields];
+    }
+
+    public function getFieldValue($index, $field) {
+
+        $filters = $this->view->display_handler->getOption('filters');
+
+        foreach (['type', 'bundle', 'media_bundle'] as $key) {
+            if (!empty($filters[$key]['value'])) {
+                $bundle = $filters[$key]['value'];
+                if (is_array($bundle)) {
+                    $bundle = reset($bundle);
+                }
+                break;
+            }
+        }
+
+        // 1. Récupérer la table de base
+        $base_table = $this->view->storage->get('base_table');
+
+        // 2. Correspondance table → entity type
+        $table_to_entity = [
+            'node_field_data' => 'node',
+            'media_field_data' => 'media',
+            'user_field_data' => 'user',
+            'taxonomy_term_field_data' => 'taxonomy_term',
+            // Ajoute d'autres cas si besoin
+        ];
+        $entity_type_id = $table_to_entity[$base_table] ?? $base_table;
+
+        // 3. Récupérer la définition du champ
+        $field_name = $this->view->field[$field]->field;
+        $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $bundle);
+        $field_definition = $field_definitions[$field_name] ?? NULL;
+
+        // 4. Utilisation
+        if ($field_definition) {
+            $type = $field_definition->getType();
+            // Cas champ texte
+            if (in_array($type, ['string', 'text', 'text_long', 'text_with_summary'])) {
+                $this->view->row_index = $index;
+                $value = $this->view->field[$field]->getValue($this->view->result[$index]);
+                unset($this->view->row_index);
+                return $value;
+            }
+            // Cas champ taxonomie (entity_reference vers taxonomy_term)
+            elseif ($type === 'entity_reference' && $field_definition->getSetting('target_type') === 'taxonomy_term') {
+                $row_entity = $this->view->result[$index]->_entity ?? null;
+                if ($row_entity && $row_entity->hasField($field_name)) {
+                    $labels = [];
+                    foreach ($row_entity->get($field_name) as $item) {
+                        if ($item->entity) {
+                            $labels[] = $item->entity->label();
+                        }
+                    }
+                    return implode(', ', $labels); // Tableau de labels de termes
+                }
+                return '';
+            }
+        }
+
+        // Fallback
+        $this->view->row_index = $index;
+        $value = $this->view->field[$field]->getValue($this->view->result[$index]);
+        unset($this->view->row_index);
+        return $value;
     }
 }
